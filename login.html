@@ -22,6 +22,7 @@ button,input,select,textarea{font-family:inherit;color:inherit}
 .badge svg{width:14px;height:14px;opacity:.75}
 /* ---------- Split layout ---------- */
 .login{position:relative;z-index:1;display:grid;grid-template-columns:1fr .92fr;min-height:100vh}
+.login>section{min-width:0}
 .login-panel{position:relative;overflow:hidden;padding:60px;display:flex;flex-direction:column;justify-content:center;gap:28px;border-right:1px solid var(--line)}
 .l-brand{display:flex;align-items:center;gap:12px;font-family:var(--head)}
 .l-brand .mark{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--g500),var(--g800));display:grid;place-items:center;box-shadow:0 12px 30px rgba(34,197,94,.35);transition:.3s}
@@ -86,7 +87,13 @@ button,input,select,textarea{font-family:inherit;color:inherit}
   .login-form-wrap{align-content:start}
 }
 @media(max-width:600px){
-  .login-card{padding:34px 24px}
+  .login-panel{padding:36px 20px;gap:22px}
+  .login-card{padding:32px 20px}
+  .login-form-wrap{padding:32px 20px}
+  .l-brand{gap:9px}
+  .l-brand b{font-size:16px}
+  .l-brand small{letter-spacing:2px}
+  .btn-grad .btn-label{white-space:normal;text-align:center;justify-content:center}
 }
 </style>
 </head>
