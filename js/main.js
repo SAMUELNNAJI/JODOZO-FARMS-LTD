@@ -261,7 +261,7 @@
     }
   }
 
-  /* ----- Form validation + simulated success ----- */
+  /* ----- Contact form validation + email composer ----- */
   document.querySelectorAll('form[data-form]').forEach(function (f) {
     f.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -277,7 +277,19 @@
       var s = f.querySelector('.form-success');
       if (ok && s) {
         f.querySelectorAll('.field, .pill-field').forEach(function (x) { x.classList.remove('invalid'); });
-        f.reset();
+        var kind = f.getAttribute('data-form') || 'enquiry';
+        var titles = { enquiry: 'General Enquiry', quote: 'Request a Quote', distributor: 'Distributor Application', partner: 'Partnership Proposal' };
+        var lines = [];
+        f.querySelectorAll('input, select, textarea').forEach(function (input) {
+          if (!input.value.trim()) return;
+          var label = f.querySelector('label[for="' + input.id + '"]');
+          var name = label ? label.textContent.replace('*', '').trim() : input.name || input.id;
+          lines.push(name + ': ' + input.value.trim());
+        });
+        var subject = (titles[kind] || 'Website Enquiry') + ' — Jodozo Farms website';
+        var body = 'Hello Jodozo Farms,\n\n' + lines.join('\n') + '\n\nSent from the Jodozo Farms website.';
+        window.location.href = 'mailto:info@jodozofarms.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+        s.querySelector('span').innerHTML = '<b>Your email app has opened.</b> Review the message and press Send to deliver it to our team.';
         s.classList.add('show');
         s.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }

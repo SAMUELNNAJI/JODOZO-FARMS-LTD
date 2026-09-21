@@ -13,7 +13,7 @@ import { readFileSync, writeFileSync, readdirSync } from 'fs';
 const SITE_URL = 'https://www.jodozofarms.com';   // <-- production domain (no trailing slash)
 const SITE_NAME = 'Jodozo Farms Ltd';
 const DEFAULT_OG_IMAGE = 'images/hero-1.jpg';
-const SKIP = ['admin.html', 'login.html', 'admin_login.html', 'seo-inject.mjs'];
+const SKIP = ['admin.html', 'login.html', 'admin_login.html', '404.html', '500.html', 'seo-inject.mjs'];
 const OG_IMAGE_OVERRIDES = { 'news.html': 'images/news-1.jpg', 'projects.html': 'images/proj-maize.jpg' };
 
 /* ---------- helpers ---------- */

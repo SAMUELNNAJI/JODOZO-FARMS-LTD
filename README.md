@@ -106,6 +106,21 @@ Every public page ships with a full on-page SEO head — unique `<title>` + `<me
 - **`SITE_URL`** (currently `https://www.jodozofarms.com` — a placeholder) must be set to your real production domain in **both** `seo-inject.mjs` and `js/post.js`, then re-run the injector and redeploy.
 - Admin pages (`admin.html`, `login.html`) are `noindex, nofollow` and excluded from the sitemap and robots rules.
 
+## Custom Error Pages
+
+Branded error pages matching the site design live at the root:
+
+| File | Used for |
+|---|---|
+| **`404.html`** | Page not found — dark hero with quick links back to popular pages. |
+| **`500.html`** | Server error. |
+
+Host coverage:
+
+- **GitHub Pages / Netlify / Vercel** — serve the root `404.html` (and `500.html` on Netlify) automatically, no config needed.
+- **Apache / cPanel** — the included **`.htaccess`** wires `ErrorDocument 404 /404.html` and `ErrorDocument 500 /500.html`.
+- Both pages are `noindex, nofollow` and excluded from `sitemap.xml` (via the skip list in `seo-inject.mjs`).
+
 ## Deployment
 
 Upload everything to any static host (Netlify, Vercel, GitHub Pages, cPanel). No server-side requirements.

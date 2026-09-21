@@ -1,0 +1,4 @@
+# JODOZO FARMS LTD — custom error pages (Apache / cPanel)
+# Netlify, Vercel and GitHub Pages serve 404.html automatically; this file covers Apache hosts.
+ErrorDocument 404 /404.html
+ErrorDocument 500 /500.html

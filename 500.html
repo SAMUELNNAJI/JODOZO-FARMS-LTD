@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Something Went Wrong (500) — Jodozo Farms Ltd</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+.err-page{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;padding:48px 20px;overflow:hidden;background:var(--g900)}
+.err-page .bgimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.22;z-index:0}
+.err-page::after{content:'';position:absolute;inset:0;background:radial-gradient(130% 130% at 50% -10%,rgba(13,59,33,.55),rgba(8,38,21,.94));z-index:1}
+.err-inner{position:relative;z-index:2;max-width:640px;width:100%}
+.err-code{font-family:var(--head);font-weight:800;font-size:clamp(96px,18vw,180px);line-height:.95;letter-spacing:-4px;background:linear-gradient(92deg,#f0fdf4,#fbbf24);-webkit-background-clip:text;background-clip:text;color:transparent}
+.err-inner h1{font-size:clamp(24px,3vw,36px);color:#fff;margin:20px 0 12px;letter-spacing:-.5px}
+.err-inner p{color:var(--g200);max-width:560px;font-size:15.5px;margin:0 auto}
+.err-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px;justify-content:center}
+@media(max-width:640px){.err-actions .btn{width:100%;justify-content:center}}
+</style>
+</head>
+<body>
+<main class="err-page">
+  <img class="bgimg" src="images/hero-3.jpg" alt="">
+  <div class="err-inner">
+    <div class="err-code">500</div>
+    <h1>Something went wrong on our side.</h1>
+    <p>Our barn doors hit a snag while serving this page. It's not you — please try again in a little while.</p>
+    <div class="err-actions">
+      <a class="btn btn-primary" href="index.html">Back to homepage <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a>
+      <a class="btn btn-outline" href="contact.html">Report the issue</a>
+    </div>
+  </div>
+</main>
+</body>
+</html>
