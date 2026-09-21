@@ -115,18 +115,54 @@
     });
   }
 
+  var DZ_ICON_DEFAULT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-4.5-4.5L7 20"/></svg>';
+  var DZ_ICON_OK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>';
+
+  /* Reset a dropzone back to its empty state (also clears the native file input) */
+  function resetUploadBox(inputId) {
+    var input = document.getElementById(inputId);
+    if (!input) return;
+    input.value = '';
+    var box = input.closest('.dropzone');
+    if (!box) return;
+    box.classList.remove('has-file', 'drag');
+    var t = box.querySelector('.dz-text');
+    if (t) t.innerHTML = box.getAttribute('data-text') || '<b>Choose a photo</b> or drag &amp; drop it here';
+    var icon = box.querySelector('.dz-icon');
+    if (icon) icon.innerHTML = DZ_ICON_DEFAULT;
+  }
+
   function wireUpload(inputId, previewId, noteId, key) {
     var input = document.getElementById(inputId);
     if (!input) return;
-    input.addEventListener('change', function () {
-      var file = input.files && input.files[0];
+    var box = input.closest('.dropzone');
+    var text = box ? box.querySelector('.dz-text') : null;
+    var icon = box ? box.querySelector('.dz-icon') : null;
+
+    function setChosen(name) {
+      if (!text) return;
+      text.innerHTML = name
+        ? '<b>Photo selected</b> — click to replace it'
+        : (box && box.getAttribute('data-text')) || '<b>Choose a photo</b> or drag &amp; drop it here';
+    }
+
+    function handleFile(file) {
       var note = document.getElementById(noteId);
-      if (!file) { pendingUploads[key] = null; return; }
+      if (!file) {
+        pendingUploads[key] = null;
+        if (box) box.classList.remove('has-file');
+        if (icon) icon.innerHTML = DZ_ICON_DEFAULT;
+        setChosen('');
+        return;
+      }
       if (!/^image\//.test(file.type)) {
         if (note) note.textContent = 'That file is not an image — please choose a photo.';
         pendingUploads[key] = null;
         return;
       }
+      if (box) box.classList.add('has-file');
+      if (icon) icon.innerHTML = DZ_ICON_OK;
+      setChosen(file.name);
       var prev = document.getElementById(previewId);
       if (prev) prev.src = (window.URL || window.webkitURL).createObjectURL(file);
       if (note) note.textContent = 'Compressing "' + file.name + '"...';
@@ -138,7 +174,29 @@
         pendingUploads[key] = null;
         if (note) note.textContent = 'That image could not be read. Please try another photo.';
       });
+    }
+
+    input.addEventListener('change', function () {
+      handleFile(input.files && input.files[0]);
     });
+
+    /* Drag & drop onto the zone */
+    if (box) {
+      ['dragenter', 'dragover'].forEach(function (ev) {
+        box.addEventListener(ev, function (e) { e.preventDefault(); e.stopPropagation(); box.classList.add('drag'); });
+      });
+      ['dragleave', 'dragend'].forEach(function (ev) {
+        box.addEventListener(ev, function () { box.classList.remove('drag'); });
+      });
+      box.addEventListener('drop', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        box.classList.remove('drag');
+        var files = e.dataTransfer && e.dataTransfer.files;
+        if (!files || !files.length) return;
+        try { input.files = files; } catch (err) { /* older browsers: preview still updates */ }
+        handleFile(files[0]);
+      });
+    }
   }
 
   /* ---------- Safe storage (localStorage has limited space) ---------- */
@@ -210,6 +268,7 @@
     var f = $('#postForm'); if (!f) return;
     f.reset(); $('#pfId').value = '';
     pendingUploads.post = null;
+    resetUploadBox('pfUpload');
     fillSelect($('#pfImg'), 'news-1.jpg');
     $('#pfBody').value = '';
     var prev = $('#pfPreview'); if (prev) prev.src = 'images/news-1.jpg';
@@ -224,7 +283,7 @@
     $('#pfCat').value = p.cat; $('#pfDate').value = p.date;
     $('#pfBody').value = p.body || '';
     pendingUploads.post = null;
-    var up = $('#pfUpload'); if (up) up.value = '';
+    resetUploadBox('pfUpload');
     if (p.img && p.img.indexOf('data:image') === 0) { fillSelect($('#pfImg'), 'news-1.jpg'); }
     else { fillSelect($('#pfImg'), p.img.replace('images/', '')); }
     var prev = $('#pfPreview'); if (prev) prev.src = p.img;
@@ -294,6 +353,7 @@
     var f = $('#projForm'); if (!f) return;
     f.reset(); $('#prId').value = '';
     pendingUploads.project = null;
+    resetUploadBox('prUpload');
     fillSelect($('#prImg'), 'proj-maize.jpg');
     var prev = $('#prPreview'); if (prev) prev.src = 'images/proj-maize.jpg';
     var note = $('#prUploadNote'); if (note) note.textContent = 'No file chosen yet. Files are auto-compressed on save. Or pick a site photo below.';
@@ -306,7 +366,7 @@
     $('#prId').value = p.id; $('#prTitle').value = p.title; $('#prChip').value = p.chip;
     $('#prCat').value = p.cat; $('#prLoc').value = p.loc; $('#prStatus').value = p.status;
     pendingUploads.project = null;
-    var up = $('#prUpload'); if (up) up.value = '';
+    resetUploadBox('prUpload');
     if (p.img && p.img.indexOf('data:image') === 0) { fillSelect($('#prImg'), 'proj-maize.jpg'); }
     else { fillSelect($('#prImg'), p.img.replace('images/', '')); }
     var prev = $('#prPreview'); if (prev) prev.src = p.img;
