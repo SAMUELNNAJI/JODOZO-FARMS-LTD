@@ -6,7 +6,7 @@ const HEADER_HTML = `
 <header class="site-header" id="siteHeader">
   <div class="container header-inner">
     <a class="brand" href="index.html" aria-label="Jodozo Farms Ltd — Home">
-      <span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M12 20v-9"/><path d="M12 11C12 6.6 8.4 3 4 3c0 4.4 3.6 8 8 8z"/><path d="M12 13c0-3.3 2.7-6 6-6 0 3.3-2.7 6-6 6z"/></svg></span>
+      <span class="brand-mark"><img src="favicon.png" alt="Jodozo Farms logo"></span>
       <span class="brand-text"><strong>JODOZO</strong><span>FARMS LTD</span></span>
     </a>
     <nav class="main-nav" id="mainNav" aria-label="Main navigation">
@@ -80,7 +80,7 @@ const FOOTER_HTML = `
     <div class="foot-grid">
       <div class="f-brand">
         <a class="brand" href="index.html" aria-label="Jodozo Farms Ltd — Home">
-          <span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M12 20v-9"/><path d="M12 11C12 6.6 8.4 3 4 3c0 4.4 3.6 8 8 8z"/><path d="M12 13c0-3.3 2.7-6 6-6 0 3.3-2.7 6-6 6z"/></svg></span>
+          <span class="brand-mark"><img src="favicon.png" alt="Jodozo Farms logo"></span>
           <span class="brand-text"><strong>JODOZO</strong><span>FARMS LTD</span></span>
         </a>
         <p>Growing Agriculture. Processing Opportunities. Building Sustainable Communities — from our farms to your table.</p>

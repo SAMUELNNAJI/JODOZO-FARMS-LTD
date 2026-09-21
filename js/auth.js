@@ -27,12 +27,18 @@
         busy = true;
         card.classList.add('granted');
         var btn = form.querySelector('.btn-grad');
-        if (btn) btn.innerHTML = 'Access granted — loading dashboard...';
+        var btnLabel = btn ? btn.querySelector('.btn-label') : null;
+        var spinner = btn ? btn.querySelector('.spinner') : null;
+        if (btn) {
+          btn.disabled = true;
+          if (btnLabel) btnLabel.style.display = 'none';
+          if (spinner) spinner.style.display = 'inline-flex';
+        }
         if (window.gsap) {
-          gsap.to(card, { scale: 1.02, duration: .35, ease: 'power2.out' });
-          setTimeout(function () { window.location.href = 'admin.html'; }, 620);
+          gsap.to(card, { scale: 1.03, duration: .35, ease: 'power2.out' });
+          setTimeout(function () { window.location.href = 'admin.html'; }, 900);
         } else {
-          setTimeout(function () { window.location.href = 'admin.html'; }, 350);
+          setTimeout(function () { window.location.href = 'admin.html'; }, 600);
         }
       } else {
         fail('Incorrect email or password. Please try again.');
