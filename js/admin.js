@@ -19,6 +19,29 @@
     setTimeout(function () { t.classList.remove('in'); setTimeout(function () { t.remove(); }, 400); }, 3200);
   }
 
+  /* ---------- Theme toggle (dark default, optional light) ---------- */
+  var THEME_KEY = 'jf_admin_theme';
+  function applyTheme(theme) {
+    var light = theme === 'light';
+    document.body.classList.toggle('light', light);
+    var lbl = $('#themeLabel');
+    if (lbl) lbl.textContent = light ? 'Dark mode' : 'Light mode';
+    var btn = $('#themeToggle');
+    if (btn) btn.setAttribute('aria-label', light ? 'Switch to dark mode' : 'Switch to light mode');
+  }
+  (function initTheme() {
+    var saved = null;
+    try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
+    applyTheme(saved === 'light' ? 'light' : 'dark');
+    var tt = $('#themeToggle');
+    if (tt) tt.addEventListener('click', function () {
+      var next = document.body.classList.contains('light') ? 'dark' : 'light';
+      try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+      applyTheme(next);
+      toast(next === 'light' ? 'Light mode on.' : 'Dark mode on.');
+    });
+  })();
+
   /* ---------- Route guard — sign-in lives on its own page (login.html) ---------- */
   var appView = $('#appView');
   var LOGIN_PAGE = 'login.html';
