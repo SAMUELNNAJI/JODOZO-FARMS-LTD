@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>News &amp; Resources — Jodozo Farms Ltd</title>
+<meta name="description" content="Agriculture news, company updates, farming tips, articles and publications from Jodozo Farms Ltd.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div id="site-header"></div>
+<main>
+<section class="page-hero">
+  <img class="bgimg" src="images/news-1.jpg" alt="">
+  <div class="container">
+    <nav class="crumbs"><a href="index.html">Home</a><span class="sep">›</span><span>News &amp; Resources</span></nav>
+    <h1>News &amp; Resources</h1>
+    <p>Agriculture news, company announcements, practical farming tips, articles and publications from the Jodozo team.</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="filter-bar reveal">
+      <button class="fchip active" data-filter="all">All Posts</button>
+      <button class="fchip" data-filter="company">Company News</button>
+      <button class="fchip" data-filter="tips">Farming Tips</button>
+      <button class="fchip" data-filter="insights">Insights</button>
+      <button class="fchip" data-filter="events">Events</button>
+    </div>
+    <div class="grid cols-3" data-render="posts"></div>
+  </div>
+</section>
+<section class="section soft">
+  <div class="container">
+    <div class="sub-panel reveal">
+      <svg class="sub-leaf l1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 4 13c0-5 4-9 16-10-1 12-5 16-9 17z"/><path d="M4 21c4-6 8-9 12-11"/></svg>
+      <svg class="sub-leaf l2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 4 13c0-5 4-9 16-10-1 12-5 16-9 17z"/><path d="M4 21c4-6 8-9 12-11"/></svg>
+      <div class="sub-grid">
+        <div class="sub-copy">
+          <span class="eyebrow" style="color:var(--g300)">Newsletter</span>
+          <h2>Grow Your Farm Knowledge</h2>
+          <p>Seasonal advice, market prices, academy dates and project updates — one email a month, written by people who farm.</p>
+          <ul class="sub-points">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Practical, seasonal farming tips</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Priority invites to Academy field days</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>New produce &amp; price alerts — zero spam</li>
+          </ul>
+        </div>
+        <div class="sub-form">
+          <form data-form="newsletter" novalidate>
+            <div class="pill-field">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+              <input id="nl-email" type="email" placeholder="Enter your email address" required>
+              <button class="btn btn-primary" type="submit">Subscribe <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></button>
+              <span class="err">Please enter a valid email address.</span>
+            </div>
+            <p class="sub-note">Join 2,000+ growers, agripreneurs and partners already reading.</p>
+            <div class="form-success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 5-5"/></svg><span><b>You're subscribed!</b> Watch out for our next edition.</span></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+<div id="site-footer"></div>
+<script src="js/layout.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+    <script src="js/store.js" defer></script>
+    <script src="js/main.js" defer></script>
+</body>
+</html>
