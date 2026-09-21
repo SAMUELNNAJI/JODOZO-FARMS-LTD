@@ -96,6 +96,16 @@ Every change saves instantly to `localStorage` and the public pages re-render fr
 - Colours: forest-green palette (`--g950 #082615` … `--g500 #22c55e`), soft off-white sections
 - All styling in `css/styles.css` (cards, buttons, hero, value chain, partner band, forms, tabs, responsive breakpoints at 1080/900/640px)
 
+## SEO
+
+Every public page ships with a full on-page SEO head — unique `<title>` + `<meta name="description">`, canonical URL, Open Graph (Facebook/WhatsApp/LinkedIn), Twitter cards, `theme-color`, and JSON-LD structured data (`Organization` + `WebSite` on the homepage, dynamic `Article` schema on `post.html`).
+
+- **`robots.txt`** allows all crawlers, blocks `admin.html` / `login.html`, and points to the sitemap.
+- **`sitemap.xml`** lists all 25 public pages (dynamic `post.html?id=…` detail pages are excluded — single-page app routes can't be enumerated statically).
+- **`seo-inject.mjs`** is the generator: it reads each page's existing title/description and injects the head tags, then writes `sitemap.xml` + `robots.txt`. It is idempotent — run `node seo-inject.mjs` any time you add a new page.
+- **`SITE_URL`** (currently `https://www.jodozofarms.com` — a placeholder) must be set to your real production domain in **both** `seo-inject.mjs` and `js/post.js`, then re-run the injector and redeploy.
+- Admin pages (`admin.html`, `login.html`) are `noindex, nofollow` and excluded from the sitemap and robots rules.
+
 ## Deployment
 
 Upload everything to any static host (Netlify, Vercel, GitHub Pages, cPanel). No server-side requirements.
