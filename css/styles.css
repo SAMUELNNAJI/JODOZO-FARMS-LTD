@@ -472,7 +472,52 @@ h1,h2,h3,h4{font-family:var(--head);line-height:1.25;color:var(--ink);font-weigh
 @media (max-width:900px){.sub-grid{grid-template-columns:1fr;gap:36px}.sub-panel{padding:44px 30px}}
 @media (max-width:640px){.sub-panel{padding:36px 22px}.pill-field{flex-wrap:wrap;border-radius:22px}.pill-field .btn{width:100%;justify-content:center}}
 
-/* ---------- Hidden admin access ---------- */
+/* ============================================================
+   V4 — Post detail page + upload form styles
+   ============================================================ */
+.post-article{background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:var(--sh-sm)}
+.post-article-img{height:min(420px,52vw);overflow:hidden;position:relative}
+.post-article-img img{width:100%;height:100%;object-fit:cover}
+.post-article-img::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,38,21,0) 55%,rgba(8,38,21,.35))}
+.post-article-body{padding:44px 42px}
+.post-article-body p{color:var(--muted);margin-bottom:20px;font-size:16.5px;line-height:1.85}
+.post-article-body p:first-of-type::first-letter{font-family:var(--head);font-weight:800;font-size:54px;color:var(--g600);float:left;line-height:.85;margin:6px 12px 0 0}
+.post-share{display:flex;gap:10px;flex-wrap:wrap;margin-top:30px;padding-top:26px;border-top:1px solid var(--line)}
+.post-layout{display:grid;grid-template-columns:1.65fr .95fr;gap:52px;align-items:start}
+.post-side{background:var(--soft);border:1px solid var(--line);border-radius:18px;padding:28px 24px;position:sticky;top:96px}
+.post-side h3{font-size:15.5px;margin-bottom:18px}
+.rel-card{display:flex;gap:13px;align-items:center;margin-bottom:16px;padding:10px;border-radius:14px;transition:.28s}
+.rel-card:hover{background:#fff;box-shadow:var(--sh-sm);transform:translateX(4px)}
+.rel-card img{width:78px;height:62px;object-fit:cover;border-radius:10px;flex:none}
+.rel-card b{font-size:13.5px;font-family:var(--head);line-height:1.45;display:block}
+.post-side .btn{width:100%;justify-content:center;margin-top:8px}
+@media(max-width:900px){.post-layout{grid-template-columns:1fr}.post-side{position:static}.post-article-body{padding:30px 24px}}
+
+/* ---------- Admin upload form additions ---------- */
+.fld textarea{background:rgba(4,18,11,.6);border:1px solid var(--line);border-radius:12px;padding:11px 14px;font-size:14px;outline:none;transition:.22s;width:100%;resize:vertical;min-height:158px;line-height:1.65}
+.fld textarea:focus{border-color:var(--g500);box-shadow:0 0 0 4px rgba(34,197,94,.16)}
+.fld-note{font-weight:400;font-size:12px;color:var(--mut)}
+.fld input[type="file"]{padding:10px 12px;cursor:pointer;font-size:13px}
+.fld input[type="file"]::file-selector-button{font-family:var(--head);font-weight:600;font-size:12.5px;color:#06220f;background:linear-gradient(135deg,var(--g400),var(--g500));border:0;border-radius:9px;padding:8px 14px;margin-right:12px;cursor:pointer}
+
+/* ============================================================
+   V3 — Reliable nav dropdown toggles
+   ============================================================ */
+.has-drop.open > a{color:var(--g700);background:var(--g50)}
+.has-drop.open > a .chev{transform:rotate(180deg)}
+.has-drop.open .drop{opacity:1;visibility:visible;transform:none;display:grid}
+/* Desktop: default display for the panels */
+@media (min-width:1081px){
+  .drop{display:block}
+  .drop.wide{display:grid}
+  .has-drop.open .drop.wide{display:grid}
+}
+/* Mobile / tablet: wide panels must stay collapsed until opened */
+@media (max-width:1080px){
+  .drop.wide{display:none}
+  .has-drop.open .drop.wide{display:grid}
+  .has-drop.open > a{background:var(--g50)}
+}
 .admin-key{opacity:0;font-size:1px;line-height:1;color:transparent;margin-left:5px;cursor:default;-webkit-user-select:none;user-select:none}
 .admin-key:focus{outline:none}
 html.gsap-on .reveal{opacity:1;transform:none;transition:none}

@@ -14,6 +14,7 @@ const HEADER_HTML = `
         <li class="has-drop">
           <a href="about.html" data-nav="about">About <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></a>
           <div class="drop">
+            <a href="about.html">About Jodozo Farms</a>
             <a href="about.html#profile">Company Profile</a>
             <a href="about.html#vision">Vision &amp; Mission</a>
             <a href="about.html#values">Our Core Values</a>
@@ -24,6 +25,7 @@ const HEADER_HTML = `
         <li class="has-drop">
           <a href="agribusiness.html" data-nav="agribusiness">Agribusiness <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></a>
           <div class="drop wide">
+            <a href="agribusiness.html">Agribusiness Overview</a>
             <a href="crop-production.html">Crop Production</a>
             <a href="livestock-farming.html">Livestock Farming</a>
             <a href="poultry-farming.html">Poultry Farming</a>
@@ -39,6 +41,7 @@ const HEADER_HTML = `
         <li class="has-drop">
           <a href="services.html" data-nav="services">Services <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></a>
           <div class="drop wide">
+            <a href="services.html">All Services</a>
             <a href="mechanised-farming.html">Mechanised Farming</a>
             <a href="farm-academy.html">Jodozo Farm Academy</a>
             <a href="services.html#empowerment">Farmer Empowerment</a>
@@ -53,6 +56,7 @@ const HEADER_HTML = `
         <li class="has-drop">
           <a href="partnerships.html" data-nav="partnerships">Partnerships <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></a>
           <div class="drop">
+            <a href="partnerships.html">Partnerships Overview</a>
             <a href="partnerships.html#investors">Investment Opportunities</a>
             <a href="partnerships.html#outgrowers">Farmers &amp; Outgrowers</a>
             <a href="partnerships.html#suppliers">Suppliers</a>

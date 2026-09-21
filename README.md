@@ -53,7 +53,7 @@ CONTACT             contact.html  (Enquiry / Quote / Distributor / Partner tabs 
 - **Shared layout** — header (with dropdowns), footer and floating WhatsApp / back-to-top buttons are injected once from `js/layout.js`; active-menu state auto-highlights per page.
 - **Behaviours** in `js/main.js`: hero slider, mobile slide-in nav with accordion dropdowns, scroll-reveal animations, animated stat counters, project/news category filtering, contact form tabs (deep-linkable via `?form=enquiry|quote|distributor|partner`), and client-side form validation with success states.
 - **Forms** currently simulate submission in the browser. To make them live, connect `form[data-form]` in `contact.html` / `news.html` to your backend, Formspree, Netlify Forms or a mailto handler.
-- **Images** live in `/images` (sourced from Unsplash). Replace with real company photography when available — keep the same file names to avoid code changes.
+- **Images** live in `/images` — real **Nigerian agriculture photography** (maize threshing in Makarfi, Kaduna; ploughing in Kwara; poultry at Barnawa; Fulani cattle; catfish ponds; cassava and palm-oil processing; Nigerian markets; irrigation; Lagos port and more), each chosen to match its card or section, sourced from Wikimedia Commons with the full licence/author guide in `/images/CREDITS.md`. Replace with Jodozo's own farm photography when available — keep the same file names to avoid code changes.
 - **Map** on the Contact page is a Google Maps embed; update the `iframe src` with the exact farm coordinates.
 
 ## Admin Dashboard & Sign In
@@ -75,8 +75,8 @@ The login link is intentionally **invisible** on the public site. Reach the sign
 ### What you can manage once signed in
 
 - **Overview** — stat cards (posts, projects, ongoing, completed/planned), a posts-by-category bar chart and recent activity feed.
-- **Posts & Blog** — publish, edit, search and delete news posts. Each post has a title, tag label, category, date and cover image (chosen from the site's image library with live preview).
-- **Featured Projects** — add, edit and delete portfolio projects with card chip label, category, location, status (Ongoing / Completed / Planned) and image.
+- **Posts & Blog** — publish, edit, search and delete news posts. Each post has a title, tag label, category, date, **full body content** (blank-line-separated paragraphs) and a cover photo that you **upload from your own Nigeria farm photos** (auto-compressed and stored with the post) — or pick from the site library as a fallback. Every post automatically opens its own **detail page** (`post.html?id=...`) with a hero, drop-cap article body and a "More from Jodozo" sidebar.
+- **Featured Projects** — add, edit and delete portfolio projects with card chip label, category, location, status (Ongoing / Completed / Planned) and a **photo you upload from your device** (auto-compressed) — or a site-library image. A storage-full guard prevents silent data loss.
 
 Every change saves instantly to `localStorage` and the public pages re-render from it — the homepage blog strip (`data-limit="3"`), the homepage Featured Projects strip (`data-limit="4"`), `news.html` and `projects.html` all read the same store.
 

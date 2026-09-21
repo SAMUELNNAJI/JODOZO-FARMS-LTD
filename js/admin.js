@@ -89,12 +89,67 @@
     }
   }
 
-  /* ---------- Image pickers ---------- */
-  function fillImages(sel, current) {
-    if (!sel) return;
-    sel.innerHTML = JF.IMAGES.map(function (f) {
-      return '<option value="' + f + '"' + (f === current ? ' selected' : '') + '>' + f + '</option>';
-    }).join('');
+  /* ---------- Image upload (stores compressed image as data, upload from your device) ---------- */
+  var pendingUploads = {};
+  var MAX_DIM = 1200, JPEG_Q = 0.82;
+
+  function compressImage(file) {
+    return new Promise(function (resolve, reject) {
+      var url = (window.URL || window.webkitURL).createObjectURL(file);
+      var img = new Image();
+      img.onload = function () {
+        try {
+          var scale = Math.min(1, MAX_DIM / Math.max(img.width, img.height));
+          var w = Math.max(1, Math.round(img.width * scale));
+          var h = Math.max(1, Math.round(img.height * scale));
+          var canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          (window.URL || window.webkitURL).revokeObjectURL(url);
+          resolve(canvas.toDataURL('image/jpeg', JPEG_Q));
+        } catch (err) { reject(err); }
+      };
+      img.onerror = function () { reject(new Error('Could not read that image.')); };
+      img.src = url;
+    });
+  }
+
+  function wireUpload(inputId, previewId, noteId, key) {
+    var input = document.getElementById(inputId);
+    if (!input) return;
+    input.addEventListener('change', function () {
+      var file = input.files && input.files[0];
+      var note = document.getElementById(noteId);
+      if (!file) { pendingUploads[key] = null; return; }
+      if (!/^image\//.test(file.type)) {
+        if (note) note.textContent = 'That file is not an image — please choose a photo.';
+        pendingUploads[key] = null;
+        return;
+      }
+      var prev = document.getElementById(previewId);
+      if (prev) prev.src = (window.URL || window.webkitURL).createObjectURL(file);
+      if (note) note.textContent = 'Compressing "' + file.name + '"...';
+      compressImage(file).then(function (dataUrl) {
+        pendingUploads[key] = dataUrl;
+        if (prev) prev.src = dataUrl;
+        if (note) note.textContent = 'Ready: ' + file.name + ' (compressed, saved with the post).';
+      }).catch(function () {
+        pendingUploads[key] = null;
+        if (note) note.textContent = 'That image could not be read. Please try another photo.';
+      });
+    });
+  }
+
+  /* ---------- Safe storage (localStorage has limited space) ---------- */
+  function saveGuarded(key, list) {
+    try {
+      localStorage.setItem(key, JSON.stringify(list));
+      return true;
+    } catch (e) {
+      toast('Storage is full — try a shorter body or a smaller photo.', 'err');
+      return false;
+    }
   }
 
   /* ---------- Posts ---------- */
@@ -115,21 +170,38 @@
         '<button class="btn-ghost2 btn-danger" data-del-post="' + p.id + '">Delete</button></div></article>';
     }).join('');
   }
+  /* ---------- Image library selects ---------- */
+  function fillSelect(sel, current) {
+    if (!sel) return;
+    sel.innerHTML = JF.IMAGES.map(function (f) {
+      return '<option value="' + f + '"' + (f === current ? ' selected' : '') + '>' + f + '</option>';
+    }).join('');
+  }
+  function currentPostImage(fallback) {
+    if (pendingUploads.post) return pendingUploads.post;
+    if (fallback && fallback.indexOf('data:image') === 0) return fallback;
+    var sel = $('#pfImg');
+    if (sel && sel.value) return 'images/' + sel.value;
+    return fallback || 'images/news-1.jpg';
+  }
   function savePost(e) {
     e.preventDefault();
     var id = $('#pfId').value, list = JF.getPosts();
+    var prev = id ? list.filter(function (p) { return p.id === id; })[0] : null;
     var obj = {
       id: id || JF.uid(),
       title: $('#pfTitle').value.trim(),
       tag: $('#pfTag').value.trim() || 'Company News',
       cat: $('#pfCat').value,
       date: $('#pfDate').value.trim() || new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
-      img: 'images/' + $('#pfImg').value
+      img: currentPostImage(prev ? prev.img : null),
+      body: $('#pfBody').value.trim()
     };
     if (!obj.title) { toast('Post title is required.', 'err'); return; }
-    if (id) { list = list.map(function (p) { return p.id === id ? obj : p; }); }
+    var next = list;
+    if (id) { next = list.map(function (p) { return p.id === id ? obj : p; }); }
     else { list.unshift(obj); }
-    JF.savePosts(list);
+    if (!saveGuarded('jf_posts', next)) return;
     resetPostForm(); renderPosts(); renderOverview();
     switchView('posts');
     toast(id ? 'Post updated successfully.' : 'Post published to the website.');
@@ -137,9 +209,12 @@
   function resetPostForm() {
     var f = $('#postForm'); if (!f) return;
     f.reset(); $('#pfId').value = '';
+    pendingUploads.post = null;
+    fillSelect($('#pfImg'), 'news-1.jpg');
+    $('#pfBody').value = '';
+    var prev = $('#pfPreview'); if (prev) prev.src = 'images/news-1.jpg';
+    var note = $('#pfUploadNote'); if (note) note.textContent = 'No file chosen yet. Files are auto-compressed on save. You can also pick from the library below.';
     $('#pfSubmit').innerHTML = 'Publish Post';
-    fillImages($('#pfImg'), 'news-1.jpg');
-    var prev = $('#pfPreview'); if (prev) prev.src = 'images/' + $('#pfImg').value;
     $('#postFormTitle').textContent = 'Add New Post';
   }
   function editPost(id) {
@@ -147,8 +222,16 @@
     if (!p) return;
     $('#pfId').value = p.id; $('#pfTitle').value = p.title; $('#pfTag').value = p.tag;
     $('#pfCat').value = p.cat; $('#pfDate').value = p.date;
-    fillImages($('#pfImg'), p.img.replace('images/', ''));
+    $('#pfBody').value = p.body || '';
+    pendingUploads.post = null;
+    var up = $('#pfUpload'); if (up) up.value = '';
+    if (p.img && p.img.indexOf('data:image') === 0) { fillSelect($('#pfImg'), 'news-1.jpg'); }
+    else { fillSelect($('#pfImg'), p.img.replace('images/', '')); }
     var prev = $('#pfPreview'); if (prev) prev.src = p.img;
+    var note = $('#pfUploadNote');
+    if (note) note.textContent = (p.img && p.img.indexOf('data:image') === 0)
+      ? 'Custom uploaded photo attached — choose a new file to replace it.'
+      : 'Using the site image shown. Upload a new photo to replace it.';
     $('#pfSubmit').innerHTML = 'Update Post';
     $('#postFormTitle').textContent = 'Edit Post';
     switchView('posts');
@@ -178,9 +261,17 @@
         '<button class="btn-ghost2 btn-danger" data-del-proj="' + p.id + '">Delete</button></div></article>';
     }).join('');
   }
+  function currentProjectImage(fallback) {
+    if (pendingUploads.project) return pendingUploads.project;
+    if (fallback && fallback.indexOf('data:image') === 0) return fallback;
+    var sel = $('#prImg');
+    if (sel && sel.value) return 'images/' + sel.value;
+    return fallback || 'images/proj-maize.jpg';
+  }
   function saveProject(e) {
     e.preventDefault();
     var id = $('#prId').value, list = JF.getProjects();
+    var prev = id ? list.filter(function (p) { return p.id === id; })[0] : null;
     var obj = {
       id: id || JF.uid(),
       title: $('#prTitle').value.trim(),
@@ -188,12 +279,13 @@
       cat: $('#prCat').value,
       loc: $('#prLoc').value.trim() || 'Kaduna State, Nigeria',
       status: $('#prStatus').value,
-      img: 'images/' + $('#prImg').value
+      img: currentProjectImage(prev ? prev.img : null)
     };
     if (!obj.title) { toast('Project title is required.', 'err'); return; }
-    if (id) { list = list.map(function (p) { return p.id === id ? obj : p; }); }
+    var next = list;
+    if (id) { next = list.map(function (p) { return p.id === id ? obj : p; }); }
     else { list.unshift(obj); }
-    JF.saveProjects(list);
+    if (!saveGuarded('jf_projects', next)) return;
     resetProjectForm(); renderProjects(); renderOverview();
     switchView('projects');
     toast(id ? 'Project updated successfully.' : 'Featured project added to the site.');
@@ -201,9 +293,11 @@
   function resetProjectForm() {
     var f = $('#projForm'); if (!f) return;
     f.reset(); $('#prId').value = '';
+    pendingUploads.project = null;
+    fillSelect($('#prImg'), 'proj-maize.jpg');
+    var prev = $('#prPreview'); if (prev) prev.src = 'images/proj-maize.jpg';
+    var note = $('#prUploadNote'); if (note) note.textContent = 'No file chosen yet. Files are auto-compressed on save. Or pick a site photo below.';
     $('#prSubmit').innerHTML = 'Add Featured Project';
-    fillImages($('#prImg'), 'proj-maize.jpg');
-    var prev = $('#prPreview'); if (prev) prev.src = 'images/' + $('#prImg').value;
     $('#projFormTitle').textContent = 'Add Featured Project';
   }
   function editProject(id) {
@@ -211,8 +305,15 @@
     if (!p) return;
     $('#prId').value = p.id; $('#prTitle').value = p.title; $('#prChip').value = p.chip;
     $('#prCat').value = p.cat; $('#prLoc').value = p.loc; $('#prStatus').value = p.status;
-    fillImages($('#prImg'), p.img.replace('images/', ''));
+    pendingUploads.project = null;
+    var up = $('#prUpload'); if (up) up.value = '';
+    if (p.img && p.img.indexOf('data:image') === 0) { fillSelect($('#prImg'), 'proj-maize.jpg'); }
+    else { fillSelect($('#prImg'), p.img.replace('images/', '')); }
     var prev = $('#prPreview'); if (prev) prev.src = p.img;
+    var note = $('#prUploadNote');
+    if (note) note.textContent = (p.img && p.img.indexOf('data:image') === 0)
+      ? 'Custom uploaded photo attached — choose a new file to replace it.'
+      : 'Using the site image shown. Upload a new photo to replace it.';
     $('#prSubmit').innerHTML = 'Update Project';
     $('#projFormTitle').textContent = 'Edit Project';
     switchView('projects');
@@ -242,9 +343,11 @@
     var cj = $('#prCancel'); if (cj) cj.addEventListener('click', resetProjectForm);
 
     var i1 = $('#pfImg');
-    if (i1) { fillImages(i1, 'news-1.jpg'); i1.addEventListener('change', function () { $('#pfPreview').src = 'images/' + i1.value; }); }
+    if (i1) { fillSelect(i1, 'news-1.jpg'); i1.addEventListener('change', function () { if (!pendingUploads.post) { $('#pfPreview').src = 'images/' + i1.value; } }); }
     var i2 = $('#prImg');
-    if (i2) { fillImages(i2, 'proj-maize.jpg'); i2.addEventListener('change', function () { $('#prPreview').src = 'images/' + i2.value; }); }
+    if (i2) { fillSelect(i2, 'proj-maize.jpg'); i2.addEventListener('change', function () { if (!pendingUploads.project) { $('#prPreview').src = 'images/' + i2.value; } }); }
+    wireUpload('pfUpload', 'pfPreview', 'pfUploadNote', 'post');
+    wireUpload('prUpload', 'prPreview', 'prUploadNote', 'project');
 
     var s1 = $('#postSearch'); if (s1) s1.addEventListener('input', renderPosts);
     var s2 = $('#projSearch'); if (s2) s2.addEventListener('input', renderProjects);

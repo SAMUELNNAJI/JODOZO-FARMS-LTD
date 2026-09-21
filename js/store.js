@@ -9,12 +9,18 @@ var JF = (function () {
 
   /* ---------- Seed data (matches the original site content) ---------- */
   var SEED_POSTS = [
-    { id: 'p1', title: '5 Tips for Higher Crop Yields This Season', tag: 'Farming Tips', cat: 'tips', date: 'Aug 20, 2025', img: 'images/news-1.jpg' },
-    { id: 'p2', title: 'Jodozo Farms Partners with Local Farmers', tag: 'Partnership', cat: 'company', date: 'Aug 15, 2025', img: 'images/news-2.jpg' },
-    { id: 'p3', title: 'New Processing Plant Set to Boost Local Economy', tag: 'Agribusiness', cat: 'insights', date: 'Aug 10, 2025', img: 'images/news-3.jpg' },
-    { id: 'p4', title: 'Farm Academy Opens Applications for Q4 Cohort', tag: 'Academy', cat: 'events', date: 'Aug 05, 2025', img: 'images/proj-academy.jpg' },
-    { id: 'p5', title: 'Why Dry-Season Farming Is the Future of Nigerian Agriculture', tag: 'Irrigation', cat: 'insights', date: 'Jul 28, 2025', img: 'images/news-4.jpg' },
-    { id: 'p6', title: 'Biosecurity Basics Every Poultry Farmer Should Know', tag: 'Farming Tips', cat: 'tips', date: 'Jul 20, 2025', img: 'images/news-5.jpg' }
+    { id: 'p1', title: '5 Tips for Higher Crop Yields This Season', tag: 'Farming Tips', cat: 'tips', date: 'Aug 20, 2025', img: 'images/news-1.jpg',
+      body: 'Across our Kaduna fields, the difference between an average harvest and a great one usually comes down to five decisions made before the rains settle.\n\nStart with certified seed suited to your soil, plant early within the first good rains, and give every stand enough space to breathe. Feed the crop on time — a split application of fertilizer beats one heavy dose — and scout your fields every week so pests and weeds never get ahead of you.\n\nThese are the same practices we teach at the Jodozo Farm Academy, and our outgrowers using them have reported visibly fuller cobs, season after season.' },
+    { id: 'p2', title: 'Jodozo Farms Partners with Local Farmers', tag: 'Partnership', cat: 'company', date: 'Aug 15, 2025', img: 'images/news-2.jpg',
+      body: 'We are proud to welcome a new wave of smallholder farmers into the Jodozo outgrower family across Kaduna State.\n\nUnder the partnership, each farmer receives certified inputs on flexible terms, free hands-on training at the Jodozo Farm Academy, and — most importantly — a guaranteed buyer for their harvest at transparent, market-linked prices.\n\nWhen farmers know their market before they plant, they invest with confidence. That is how rural incomes grow, and how we secure the raw materials our processing lines need.' },
+    { id: 'p3', title: 'New Processing Plant Set to Boost Local Economy', tag: 'Agribusiness', cat: 'insights', date: 'Aug 10, 2025', img: 'images/news-3.jpg',
+      body: 'Our new crop processing plant is now fully operational — and it changes the economics of farming for everyone around it.\n\nInstead of selling raw harvests at giveaway prices, farmers in our network can now have their maize, cassava and soybeans milled, dried and packaged right here in Kaduna. Less post-harvest loss, more value captured locally, and new jobs for youths in processing and logistics.\n\nThe plant also anchors our export pipeline: graded, properly packaged Nigerian produce ready for regional and international buyers.' },
+    { id: 'p4', title: 'Farm Academy Opens Applications for Q4 Cohort', tag: 'Academy', cat: 'events', date: 'Aug 05, 2025', img: 'images/proj-academy.jpg',
+      body: 'Applications are now open for the next cohort of the Jodozo Farm Academy — our practical, hands-on training school for rural and youth farmers.\n\nCourses cover crop production, mechanised farming, livestock and poultry management, agro-processing and agribusiness finance. Every lesson happens on a working farm, not in a classroom, and graduates leave with a starter plan plus linkage to inputs and guaranteed markets.\n\nOver 1,200 farmers have trained with us so far, and 70% of participants are women and young people. Come and learn on a real working farm.' },
+    { id: 'p5', title: 'Why Dry-Season Farming Is the Future of Nigerian Agriculture', tag: 'Irrigation', cat: 'insights', date: 'Jul 28, 2025', img: 'images/news-4.jpg',
+      body: 'Nigeria farms one season a year and imports food for the other eleven months. That equation changes the moment farmers can farm the dry season.\n\nWith our dams, boreholes and drip systems, Jodozo farms 365 days a year — and dry-season harvests consistently earn premium prices because supply is scarce. A hectare under drip irrigation can outperform three rainfed hectares.\n\nFrom farm ponds to centre pivots, our water and irrigation team designs systems that pay for themselves. The future of Nigerian agriculture is not more land; it is more water per land.' },
+    { id: 'p6', title: 'Biosecurity Basics Every Poultry Farmer Should Know', tag: 'Farming Tips', cat: 'tips', date: 'Jul 20, 2025', img: 'images/news-5.jpg',
+      body: 'Disease — not feed — is the biggest killer of profit on Nigerian poultry farms. The good news: most outbreaks are preventable with simple biosecurity discipline.\n\nControl who and what enters your pens: a footbath at every door, dedicated boots and overalls, and a strict quarantine for every new bird. Keep wild birds away from feed and water, vaccinate on schedule, and never share equipment between farms without disinfecting.\n\nOur layer and hatchery complex runs these protocols daily. Farmers who adopt them see mortality fall and margins rise — healthy birds simply pay better.' }
   ];
   var SEED_PROJECTS = [
     { id: 'pr1', title: 'Maize Estate Project', chip: 'Crop Farms', cat: 'crops', loc: 'Kaduna State, Nigeria', status: 'ongoing', img: 'images/proj-maize.jpg' },
@@ -29,7 +35,7 @@ var JF = (function () {
   ];
 
   /* Seed version — bump to push fresh seed data to browsers that already stored an older set */
-  var SEEDV = 'jf_seed_v', V = '3';
+  var SEEDV = 'jf_seed_v', V = '4';
   try {
     if (localStorage.getItem(SEEDV) !== V) {
       localStorage.setItem('jf_posts', JSON.stringify(SEED_POSTS));
@@ -61,12 +67,12 @@ var JF = (function () {
     uid: function () { return 'id' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); },
     login: function (email, pass) {
       if (email.toLowerCase() === this.ADMIN_EMAIL.toLowerCase() && pass === this.ADMIN_PASS) {
-        sessionStorage.setItem(AKEY, '1'); return true;
+        localStorage.setItem(AKEY, '1'); return true;
       }
       return false;
     },
-    isLogged: function () { return sessionStorage.getItem(AKEY) === '1'; },
-    logout: function () { sessionStorage.removeItem(AKEY); },
+    isLogged: function () { return localStorage.getItem(AKEY) === '1'; },
+    logout: function () { localStorage.removeItem(AKEY); },
 
     /* ---------- Public page renderers ---------- */
     esc: function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; },
@@ -79,7 +85,7 @@ var JF = (function () {
       posts.forEach(function (p, i) {
         var a = document.createElement('a');
         a.className = 'news-card reveal' + (i % 3 ? ' d' + (i % 3) : '');
-        a.href = '#post-' + p.id; a.setAttribute('data-cat', p.cat || 'company');
+        a.href = 'post.html?id=' + encodeURIComponent(p.id); a.setAttribute('data-cat', p.cat || 'company');
         a.innerHTML =
           '<div class="news-img"><img src="' + self.esc(p.img) + '" alt="' + self.esc(p.title) + '" loading="lazy"><span class="chip">' + self.esc(p.tag) + '</span></div>' +
           '<div class="news-body"><div class="news-meta"><span class="news-tag">' + self.esc(p.tag) + '</span><span>' + self.esc(p.date) + '</span></div>' +

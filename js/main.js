@@ -15,32 +15,60 @@
   onScroll();
   if (toTop) toTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
-  /* ----- Mobile navigation ----- */
-  var toggle = document.getElementById('navToggle');
-  if (toggle) {
-    toggle.addEventListener('click', function () {
-      var open = document.body.classList.toggle('nav-open');
-      toggle.classList.toggle('open', open);
-      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  /* ----- Navigation: hamburger + click-to-toggle dropdowns ----- */
+  function closeAllDrops(except) {
+    document.querySelectorAll('.has-drop.open').forEach(function (li) {
+      if (li !== except) {
+        li.classList.remove('open');
+        var l = li.querySelector('a');
+        if (l) l.setAttribute('aria-expanded', 'false');
+      }
     });
   }
-  /* Accordion dropdowns on small screens */
+  function setNav(open) {
+    document.body.classList.toggle('nav-open', open);
+    var t = document.getElementById('navToggle');
+    if (t) {
+      t.classList.toggle('open', open);
+      t.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    if (!open) closeAllDrops(null);
+  }
+  /* Mark each dropdown parent as a toggle control */
   document.querySelectorAll('.has-drop > a').forEach(function (a) {
-    a.addEventListener('click', function (e) {
-      if (window.innerWidth <= 1080) {
-        e.preventDefault();
-        a.parentElement.classList.toggle('open');
-      }
-    });
+    a.setAttribute('aria-haspopup', 'true');
+    a.setAttribute('aria-expanded', 'false');
   });
-  /* Close the panel after choosing a real link on mobile */
-  document.querySelectorAll('.main-nav a').forEach(function (a) {
-    a.addEventListener('click', function () {
-      if (window.innerWidth <= 1080 && !a.parentElement.classList.contains('has-drop')) {
-        document.body.classList.remove('nav-open');
-        if (toggle) { toggle.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); }
-      }
-    });
+  document.addEventListener('click', function (e) {
+    /* 1. Hamburger */
+    var burger = e.target.closest('#navToggle');
+    if (burger) {
+      e.preventDefault();
+      setNav(!document.body.classList.contains('nav-open'));
+      return;
+    }
+    /* 2. Dropdown parents — toggle open/close on click, on every screen size */
+    var parentLink = e.target.closest('.has-drop > a');
+    if (parentLink) {
+      var li = parentLink.parentElement;
+      var isOpen = li.classList.contains('open');
+      e.preventDefault();
+      closeAllDrops(li);
+      li.classList.toggle('open', !isOpen);
+      parentLink.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+      return;
+    }
+    /* 3. A real page link inside the nav — close the panel and dropdowns */
+    var navLink = e.target.closest('.main-nav a');
+    if (navLink) { closeAllDrops(null); setNav(false); return; }
+    /* 4. Click anywhere outside the nav closes open dropdowns */
+    if (!e.target.closest('.has-drop')) closeAllDrops(null);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' || e.key === 'Esc') { closeAllDrops(null); setNav(false); }
+  });
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 1080) setNav(false);
   });
 
   /* ----- Hero slider ----- */

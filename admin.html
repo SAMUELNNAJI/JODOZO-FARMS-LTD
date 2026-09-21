@@ -170,8 +170,13 @@ button,input,select,textarea{font-family:inherit;color:inherit}
               <div class="fld"><label for="pfTag">Tag label</label><input id="pfTag" type="text" placeholder="Farming Tips"></div>
               <div class="fld"><label for="pfCat">Category</label><select id="pfCat"><option value="tips">Farming Tips</option><option value="company">Company News</option><option value="insights">Insights</option><option value="events">Events</option></select></div>
               <div class="fld"><label for="pfDate">Date</label><input id="pfDate" type="text" placeholder="Aug 20, 2025"></div>
-              <div class="fld"><label for="pfImg">Cover image</label><select id="pfImg"></select></div>
-              <div class="fld full"><span style="font-size:12.5px;color:var(--mut)">Live preview</span><div class="preview"><img id="pfPreview" src="images/news-1.jpg" alt=""><span>Appears on the News page and the homepage blog strip.</span></div></div>
+              <div class="fld full"><label for="pfUpload">Upload cover photo <span class="fld-note">(your own Nigeria farm photo — shows on the card and the detail page)</span></label>
+                <input id="pfUpload" type="file" accept="image/*">
+                <div class="preview"><img id="pfPreview" src="images/news-1.jpg" alt=""><span id="pfUploadNote">No file chosen yet. Files are auto-compressed on save. You can also pick from the library below.</span></div>
+              </div>
+              <div class="fld"><label for="pfImg">…or pick from site library</label><select id="pfImg"></select></div>
+              <div class="fld"><label for="pfDate2">—</label><input type="text" value="Saved photos appear on News page + homepage instantly" disabled></div>
+              <div class="fld full"><label for="pfBody">Post body content</label><textarea id="pfBody" rows="8" placeholder="Write the full article here. Use a blank line between paragraphs — it will be beautifully formatted on the detail page."></textarea></div>
             </div>
             <div class="form-actions"><button class="btn-grad" type="submit" id="pfSubmit">Publish Post</button><button class="btn-ghost2" type="button" id="pfCancel">Clear form</button></div>
           </form>
@@ -207,10 +212,12 @@ button,input,select,textarea{font-family:inherit;color:inherit}
                 <option value="completed">Completed</option>
                 <option value="planned">Planned</option>
               </select></div>
-              <div class="fld"><label for="prLoc">Location</label><input id="prLoc" type="text" placeholder="Kaduna State, Nigeria"></div>
-              <div class="fld full"><label for="prImg">Project image</label><select id="prImg"></select>
-                <div class="preview"><img id="prPreview" src="images/proj-maize.jpg" alt=""><span>Shown on the homepage Featured Projects strip and the Projects page.</span></div>
+              <div class="fld full"><label for="prUpload">Upload project photo <span class="fld-note">(your own Nigeria photo of this exact project)</span></label>
+                <input id="prUpload" type="file" accept="image/*">
+                <div class="preview"><img id="prPreview" src="images/proj-maize.jpg" alt=""><span id="prUploadNote">No file chosen yet. Files are auto-compressed on save. Or pick a site photo below.</span></div>
               </div>
+              <div class="fld"><label for="prImg">…or pick from site library</label><select id="prImg"></select></div>
+              <div class="fld"><label for="prLoc">Location</label><input id="prLoc" type="text" placeholder="Kaduna State, Nigeria"></div>
             </div>
             <div class="form-actions"><button class="btn-grad" type="submit" id="prSubmit">Add Featured Project</button><button class="btn-ghost2" type="button" id="prCancel">Clear form</button></div>
           </form>
