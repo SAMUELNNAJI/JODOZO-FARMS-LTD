@@ -19,34 +19,18 @@
     setTimeout(function () { t.classList.remove('in'); setTimeout(function () { t.remove(); }, 400); }, 3200);
   }
 
-  /* ---------- Login / session ---------- */
-  var loginView = $('#loginView'), appView = $('#appView');
+  /* ---------- Route guard — sign-in lives on its own page (login.html) ---------- */
+  var appView = $('#appView');
+  var LOGIN_PAGE = 'login.html';
+  function redirectToLogin() { window.location.replace(LOGIN_PAGE); }
   function showApp() {
-    if (loginView) loginView.hidden = true;
     if (appView) appView.hidden = false;
     document.body.classList.add('app-mode');
     renderAll();
+    setTimeout(function () { toast('Welcome back, Admin.'); }, 450);
   }
-  function showLogin() {
-    if (appView) appView.hidden = true;
-    if (loginView) loginView.hidden = false;
-    document.body.classList.remove('app-mode');
-  }
-  var loginForm = $('#loginForm');
-  if (loginForm) {
-    loginForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var ok = JF.login($('#lgEmail').value.trim(), $('#lgPass').value);
-      if (ok) { toast('Welcome back, Admin.'); showApp(); }
-      else {
-        var err = $('#lgErr');
-        err.classList.add('show');
-        err.style.animation = 'none';
-        void err.offsetWidth;
-        err.style.animation = '';
-      }
-    });
-  }
+  /* Block direct access to the dashboard without a session */
+  if (!JF.isLogged()) { redirectToLogin(); }
 
   /* ---------- View switching ---------- */
   function switchView(name) {
@@ -264,13 +248,13 @@
 
     var s1 = $('#postSearch'); if (s1) s1.addEventListener('input', renderPosts);
     var s2 = $('#projSearch'); if (s2) s2.addEventListener('input', renderProjects);
-    var out = $('#logoutBtn'); if (out) out.addEventListener('click', function () { JF.logout(); showLogin(); toast('Signed out of the dashboard.', 'err'); });
+    var out = $('#logoutBtn');
+    if (out) out.addEventListener('click', function () {
+      JF.logout();
+      window.location.href = LOGIN_PAGE;
+    });
 
-    if (JF.isLogged()) { showApp(); } else { showLogin(); }
-    if (window.gsap && loginView && !loginView.hidden) {
-      gsap.fromTo('.login-panel h1', { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: .9, ease: 'power3.out', delay: .1 });
-      gsap.fromTo('.login-card', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .9, ease: 'power3.out', delay: .25 });
-    }
+    if (JF.isLogged()) { showApp(); } else { redirectToLogin(); }
   }
   if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { init(); }
 })();

@@ -22,8 +22,22 @@ var JF = (function () {
     { id: 'pr3', title: 'Catfish & Tilapia Ponds', chip: 'Fisheries', cat: 'fisheries', loc: 'Kaduna State, Nigeria', status: 'ongoing', img: 'images/proj-fish.jpg' },
     { id: 'pr4', title: 'Crop Processing Plant', chip: 'Agro-Processing', cat: 'processing', loc: 'Kaduna State, Nigeria', status: 'completed', img: 'images/proj-processing.jpg' },
     { id: 'pr5', title: 'Layer & Hatchery Complex', chip: 'Poultry', cat: 'poultry', loc: 'Kaduna State, Nigeria', status: 'ongoing', img: 'images/proj-poultry.jpg' },
-    { id: 'pr6', title: 'Mango Plantation Development', chip: 'Plantations', cat: 'plantations', loc: 'Kaduna State, Nigeria', status: 'planned', img: 'images/proj-plantation.jpg' }
+    { id: 'pr6', title: 'Mango Plantation Development', chip: 'Plantations', cat: 'plantations', loc: 'Kaduna State, Nigeria', status: 'planned', img: 'images/proj-plantation.jpg' },
+    { id: 'pr7', title: 'Farm Irrigation Scheme', chip: 'Water & Irrigation', cat: 'water', loc: 'Kaduna State, Nigeria', status: 'ongoing', img: 'images/svc-water.jpg' },
+    { id: 'pr8', title: 'Packaged Water Facility', chip: 'Water Projects', cat: 'water', loc: 'Kaduna State, Nigeria', status: 'completed', img: 'images/water-bottle.jpg' },
+    { id: 'pr9', title: 'Rural Farmers Empowerment Programme', chip: 'Rural Development', cat: 'rural', loc: 'Communities Across Kaduna', status: 'ongoing', img: 'images/proj-academy.jpg' }
   ];
+
+  /* Seed version — bump to push fresh seed data to browsers that already stored an older set */
+  var SEEDV = 'jf_seed_v', V = '3';
+  try {
+    if (localStorage.getItem(SEEDV) !== V) {
+      localStorage.setItem('jf_posts', JSON.stringify(SEED_POSTS));
+      localStorage.setItem('jf_projects', JSON.stringify(SEED_PROJECTS));
+      localStorage.setItem(SEEDV, V);
+    }
+  } catch (e) {}
+
   var IMAGE_LIBRARY = ['proj-maize.jpg','proj-cattle.jpg','proj-fish.jpg','proj-processing.jpg','proj-poultry.jpg','proj-plantation.jpg','proj-academy.jpg','svc-water.jpg','water-bottle.jpg','news-1.jpg','news-2.jpg','news-3.jpg','news-4.jpg','news-5.jpg','svc-crop.jpg','svc-livestock.jpg','svc-poultry.jpg','svc-fisheries.jpg','svc-processing.jpg','svc-mechanised.jpg','svc-equipment.jpg','feat-inputs.jpg','feat-equipment.jpg','feat-water.jpg','hero-1.jpg','hero-2.jpg','hero-3.jpg','hero-4.jpg','dairy.jpg','fruits.jpg','bee.jpg','cereal.jpg','greenhouse.jpg','market.jpg','export.jpg','consult.jpg','seeds.jpg','partner-main.jpg','partner-alt.jpg','academy-2.jpg'];
 
   function read(key, seed) {

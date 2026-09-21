@@ -56,6 +56,40 @@ CONTACT             contact.html  (Enquiry / Quote / Distributor / Partner tabs 
 - **Images** live in `/images` (sourced from Unsplash). Replace with real company photography when available — keep the same file names to avoid code changes.
 - **Map** on the Contact page is a Google Maps embed; update the `iframe src` with the exact farm coordinates.
 
+## Admin Dashboard & Sign In
+
+Access is split across two pages:
+
+| Page | Purpose |
+|---|---|
+| **`login.html`** | Public-facing sign-in screen. On successful verification it **redirects to `admin.html`**. If a session already exists it skips straight through. |
+| **`admin.html`** | The dashboard itself. It is **guarded** — opening it without a session instantly redirects you back to `login.html`. Logging out returns you to `login.html`. |
+
+The login link is intentionally **invisible** on the public site. Reach the sign-in page by either:
+
+- pressing **`Ctrl + Shift + A`** on any page, or
+- clicking the invisible 1px dot right after the copyright text in the footer.
+
+**Credentials:** `Admin@gmail.com` / `Admin@1122`
+
+### What you can manage once signed in
+
+- **Overview** — stat cards (posts, projects, ongoing, completed/planned), a posts-by-category bar chart and recent activity feed.
+- **Posts & Blog** — publish, edit, search and delete news posts. Each post has a title, tag label, category, date and cover image (chosen from the site's image library with live preview).
+- **Featured Projects** — add, edit and delete portfolio projects with card chip label, category, location, status (Ongoing / Completed / Planned) and image.
+
+Every change saves instantly to `localStorage` and the public pages re-render from it — the homepage blog strip (`data-limit="3"`), the homepage Featured Projects strip (`data-limit="4"`), `news.html` and `projects.html` all read the same store.
+
+**How rendering works**
+
+- `js/store.js` holds the data layer, the seed content (the original 6 posts + 9 projects), the session helpers (`JF.login`, `JF.isLogged`, `JF.logout`) and the render functions (`JF.renderPosts`, `JF.renderProjects`).
+- `js/auth.js` powers the sign-in page (validation, error shake, redirect to the dashboard).
+- `js/admin.js` powers the dashboard (route guard, CRUD, toasts).
+- Pages only contain a mount point, e.g. `<div class="grid cols-3" data-render="posts"></div>` or `<div class="grid cols-4" data-render="projects" data-limit="4"></div>` — JavaScript fills them in.
+- The seed is versioned (`jf_seed_v`); bump `V` in `store.js` to push fresh seed data to browsers holding older data.
+
+> **Security note:** this is a front-end demo dashboard — credentials are checked in the browser and content is stored per-browser. For production, move authentication and storage to a server (e.g. a Node/Express + database API, or Firebase/Supabase) and keep the same UI.
+
 ## Design System
 
 - Fonts: Poppins (headings) + Inter (body) via Google Fonts

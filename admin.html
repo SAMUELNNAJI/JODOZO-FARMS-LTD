@@ -28,34 +28,7 @@ button,input,select,textarea{font-family:inherit;color:inherit}
 .btn-ghost2:hover{color:#fff;border-color:rgba(74,222,128,.5);background:rgba(34,197,94,.12)}
 .btn-danger{background:rgba(239,68,68,.14);border:1px solid rgba(239,68,68,.35);color:#fca5a5}
 .btn-danger:hover{background:rgba(239,68,68,.24);color:#fff;border-color:rgba(239,68,68,.6)}
-.login{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr .95fr;min-height:100vh}
-.login-panel{position:relative;overflow:hidden;padding:60px;display:flex;flex-direction:column;justify-content:center;gap:22px;border-right:1px solid var(--line)}
-.l-brand{display:flex;align-items:center;gap:11px;font-family:var(--head)}
-.l-brand .mark{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,var(--g500),var(--g800));display:grid;place-items:center;box-shadow:0 12px 30px rgba(34,197,94,.35)}
-.l-brand b{font-size:18px;letter-spacing:.6px;display:block;line-height:1.1}
-.l-brand small{font-size:9.5px;letter-spacing:3px;color:var(--mut)}
-.login-panel h1{font-family:var(--head);font-size:clamp(32px,4vw,52px);line-height:1.07;letter-spacing:-1.2px;max-width:12ch}
-.login-panel h1 span{background:linear-gradient(92deg,var(--g400),var(--g300));-webkit-background-clip:text;background-clip:text;color:transparent}
-.login-panel>p{color:var(--mut);max-width:450px;font-size:15.5px}
-.l-chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
-.l-chips span{border:1px solid var(--line);background:var(--pane);border-radius:999px;padding:8px 15px;font-size:12.5px;color:var(--mut)}
-.orb{position:absolute;border-radius:50%;filter:blur(72px);pointer-events:none}
-.o1{width:330px;height:330px;background:rgba(34,197,94,.32);bottom:-100px;left:-80px}
-.o2{width:240px;height:240px;background:rgba(74,222,128,.2);top:-60px;right:-50px}
-.login-form-wrap{display:grid;place-items:center;padding:44px 28px}
-.login-card{width:min(440px,100%);padding:42px 38px}
-.login-card h2{font-family:var(--head);font-size:27px;margin:16px 0 6px}
-.login-card .sub{color:var(--mut);font-size:14px;margin-bottom:26px}
-.login-card label{display:block;font-size:13px;font-weight:600;font-family:var(--head);color:#cdeddb;margin-bottom:16px}
-.login-card input{width:100%;margin-top:8px;background:rgba(4,18,11,.62);border:1px solid var(--line);border-radius:14px;padding:13px 16px;font-size:14.5px;color:var(--ink);outline:none;transition:.25s}
-.login-card input::placeholder{color:rgba(233,255,243,.32)}
-.login-card input:focus{border-color:var(--g500);box-shadow:0 0 0 4px rgba(34,197,94,.18)}
-.login-card .btn-grad{width:100%;margin-top:6px}
-.lg-err{display:none;color:#fca5a5;font-size:13px;margin-bottom:14px}
-.lg-err.show{display:block;animation:shake .42s ease}
-@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}60%{transform:translateX(7px)}}
-.hint{font-size:12.5px;color:var(--mut);margin-top:16px;text-align:center}
-@media(max-width:980px){.login{grid-template-columns:1fr}.login-panel{border-right:0;border-bottom:1px solid var(--line);padding:44px 26px}}
+/* (login screen styles now live in login.html) */
 .app{position:relative;z-index:1;display:grid;grid-template-columns:264px 1fr;min-height:100vh}
 .side{border-right:1px solid var(--line);padding:26px 20px;display:flex;flex-direction:column;gap:26px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015));position:sticky;top:0;height:100vh}
 .side-brand{display:flex;align-items:center;gap:10px;font-family:var(--head);font-size:14.5px;font-weight:700;letter-spacing:.4px;line-height:1.2}
@@ -138,6 +111,7 @@ button,input,select,textarea{font-family:inherit;color:inherit}
 </style>
 </head>
 <body>
+
 <!-- ================= DASHBOARD ================= -->
 <div id="appView" class="app" hidden>
   <aside class="side">
@@ -208,7 +182,45 @@ button,input,select,textarea{font-family:inherit;color:inherit}
         </div>
       </div>
     </section>
-<!--__PROJECTSVIEW__-->
+    <!-- PROJECTS -->
+    <section class="view" id="view-projects">
+      <div class="split-2">
+        <div class="panel glass anim">
+          <h3 id="projFormTitle">Add Featured Project</h3>
+          <form id="projForm" novalidate>
+            <input type="hidden" id="prId">
+            <div class="form-grid2">
+              <div class="fld full"><label for="prTitle">Project name</label><input id="prTitle" type="text" placeholder="e.g. Maize Estate Project" required></div>
+              <div class="fld"><label for="prChip">Card label (chip)</label><input id="prChip" type="text" placeholder="Crop Farms"></div>
+              <div class="fld"><label for="prCat">Portfolio category</label><select id="prCat">
+                <option value="crops">Crop Farms</option>
+                <option value="livestock">Livestock</option>
+                <option value="poultry">Poultry</option>
+                <option value="fisheries">Fisheries</option>
+                <option value="plantations">Plantations</option>
+                <option value="processing">Agro-Processing</option>
+                <option value="water">Water &amp; Irrigation</option>
+                <option value="rural">Rural Development</option>
+              </select></div>
+              <div class="fld"><label for="prStatus">Status</label><select id="prStatus">
+                <option value="ongoing">Ongoing</option>
+                <option value="completed">Completed</option>
+                <option value="planned">Planned</option>
+              </select></div>
+              <div class="fld"><label for="prLoc">Location</label><input id="prLoc" type="text" placeholder="Kaduna State, Nigeria"></div>
+              <div class="fld full"><label for="prImg">Project image</label><select id="prImg"></select>
+                <div class="preview"><img id="prPreview" src="images/proj-maize.jpg" alt=""><span>Shown on the homepage Featured Projects strip and the Projects page.</span></div>
+              </div>
+            </div>
+            <div class="form-actions"><button class="btn-grad" type="submit" id="prSubmit">Add Featured Project</button><button class="btn-ghost2" type="button" id="prCancel">Clear form</button></div>
+          </form>
+        </div>
+        <div class="panel glass anim">
+          <div class="list-head"><h3>Portfolio</h3><input class="search" id="projSearch" type="search" placeholder="Search projects..."></div>
+          <div class="list" id="projList"></div>
+        </div>
+      </div>
+    </section>
   </main>
   <div id="toastWrap"></div>
 </div>
