@@ -8,8 +8,46 @@
   function esc(s) { return JF.esc(s); }
   function get(id) { return document.getElementById(id); }
 
+  var SITE_URL = 'https://www.jodozofarms.com'; /* keep in sync with seo-inject.mjs */
+
+  function setMeta(attr, key, content) {
+    var m = document.head.querySelector('meta[' + attr + '="' + key + '"]');
+    if (m) m.setAttribute('content', content);
+  }
+  function absImg(src) { return String(src).indexOf('http') === 0 ? src : SITE_URL + '/' + src; }
+
+  /* Keep title / description / Open Graph / canonical / Article JSON-LD in sync with the painted post */
+  function updateSeo(post) {
+    var desc = (post.body || '').replace(/\s+/g, ' ').trim() || post.title;
+    if (desc.length > 155) desc = desc.slice(0, 152).replace(/\s+\S*$/, '') + '...';
+    var url = SITE_URL + '/post.html?id=' + encodeURIComponent(post.id);
+    var img = absImg(post.img);
+    setMeta('name', 'description', desc);
+    setMeta('property', 'og:title', post.title);
+    setMeta('property', 'og:description', desc);
+    setMeta('property', 'og:url', url);
+    setMeta('property', 'og:image', img);
+    setMeta('name', 'twitter:title', post.title);
+    setMeta('name', 'twitter:description', desc);
+    setMeta('name', 'twitter:image', img);
+    var canon = document.head.querySelector('link[rel="canonical"]');
+    if (canon) canon.setAttribute('href', url);
+    var ld = get('postJsonLd');
+    if (ld) ld.textContent = JSON.stringify({
+      '@context': 'https://schema.org', '@type': 'Article',
+      headline: post.title,
+      image: [img],
+      datePublished: post.date, dateModified: post.date,
+      author: { '@type': 'Organization', name: 'Jodozo Farms Ltd' },
+      publisher: { '@type': 'Organization', name: 'Jodozo Farms Ltd', logo: { '@type': 'ImageObject', url: SITE_URL + '/favicon.png' } },
+      description: desc,
+      mainEntityOfPage: url
+    });
+  }
+
   function fill(post, posts) {
     document.title = post.title + ' — Jodozo Farms Ltd';
+    updateSeo(post);
     get('postHeroBg').src = post.img;
     get('postHeroBg').alt = post.title;
     get('postHeroChip').textContent = post.tag || 'Article';
