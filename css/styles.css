@@ -472,7 +472,9 @@ h1,h2,h3,h4{font-family:var(--head);line-height:1.25;color:var(--ink);font-weigh
 @media (max-width:900px){.sub-grid{grid-template-columns:1fr;gap:36px}.sub-panel{padding:44px 30px}}
 @media (max-width:640px){.sub-panel{padding:36px 22px}.pill-field{flex-wrap:wrap;border-radius:22px}.pill-field .btn{width:100%;justify-content:center}}
 
-/* ---------- GSAP mode helpers ---------- */
+/* ---------- Hidden admin access ---------- */
+.admin-key{opacity:0;font-size:1px;line-height:1;color:transparent;margin-left:5px;cursor:default;-webkit-user-select:none;user-select:none}
+.admin-key:focus{outline:none}
 html.gsap-on .reveal{opacity:1;transform:none;transition:none}
 html.gsap-on .d1,html.gsap-on .d2,html.gsap-on .d3,html.gsap-on .d4,html.gsap-on .d5,html.gsap-on .d6,html.gsap-on .d7,html.gsap-on .d8{transition-delay:0s}
 @media (prefers-reduced-motion:reduce){

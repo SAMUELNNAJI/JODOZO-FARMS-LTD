@@ -130,7 +130,7 @@ const FOOTER_HTML = `
       </div>
     </div>
     <div class="foot-bottom">
-      <span>&copy; <span id="year">2026</span> Jodozo Farms Ltd. All rights reserved.</span>
+      <span>&copy; <span id="year">2026</span> Jodozo Farms Ltd. All rights reserved.<a class="admin-key" href="admin.html" tabindex="-1" aria-hidden="true" title="">.</a></span>
       <span class="tags">Sustainable Farming &nbsp;|&nbsp; Food Security &nbsp;|&nbsp; Community Development</span>
     </div>
   </div>
@@ -175,5 +175,12 @@ const FLOAT_HTML = `
   }
   var y = document.getElementById('year');
   if (y) y.textContent = new Date().getFullYear();
+
+  /* Hidden admin access — Ctrl + Shift + A, or the invisible footer dot */
+  document.addEventListener('keydown', function (e) {
+    if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+      window.location.href = 'admin.html';
+    }
+  });
 })();
 
