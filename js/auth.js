@@ -51,6 +51,18 @@
     if (pass) pass.select();
   }
 
+  var eye = document.getElementById('pwEye');
+  if (eye) {
+    eye.addEventListener('click', function () {
+      var p = document.getElementById('lgPass');
+      if (!p) return;
+      var show = p.type === 'password';
+      p.type = show ? 'text' : 'password';
+      eye.classList.toggle('on', show);
+      eye.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+    });
+  }
+
   /* Entrance animation */
   if (window.gsap) {
     gsap.fromTo('.login-panel h1', { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: .9, ease: 'power3.out', delay: .1 });
