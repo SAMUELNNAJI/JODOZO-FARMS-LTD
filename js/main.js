@@ -298,10 +298,45 @@
     }
   }
 
-  /* ----- Contact form validation + email composer ----- */
+  /* ----- Contact form validation + real email delivery -----
+     Static site, so we POST the form to FormSubmit.co, which relays the
+     message straight to the admin inbox. No backend and no build step, so
+     it works on Vercel / Netlify / Apache alike. If the request fails
+     (offline, blocked endpoint) we fall back to opening the visitor's
+     mail composer so the enquiry is never silently lost. */
+  var ADMIN_EMAIL = 'jodozofarmslimited@gmail.com';
+  var FORM_ENDPOINT = 'https://formsubmit.co/ajax/' + ADMIN_EMAIL;
+  var FORM_TITLES = {
+    enquiry: 'General Enquiry',
+    quote: 'Request a Quote',
+    distributor: 'Distributor Application',
+    partner: 'Partnership Proposal',
+    newsletter: 'Newsletter Subscription'
+  };
+
+  /* Write a message into the form's .form-success panel. */
+  function setFormMsg(s, html, isError) {
+    if (!s) return;
+    var span = s.querySelector('span');
+    if (span) span.innerHTML = html;
+    s.classList.toggle('is-error', !!isError);
+    s.classList.add('show');
+    s.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
   document.querySelectorAll('form[data-form]').forEach(function (f) {
+    var btn = f.querySelector('button[type="submit"]');
+    var btnHtml = btn ? btn.innerHTML : '';
+    var s = f.querySelector('.form-success');
+
     f.addEventListener('submit', function (e) {
       e.preventDefault();
+
+      /* Honeypot - a hidden field only a bot would fill in. */
+      var trap = f.querySelector('input[name="_gotcha"]');
+      if (trap && trap.value) return;
+
+      /* ---- Validate ---- */
       var ok = true;
       f.querySelectorAll('[required]').forEach(function (inp) {
         var fl = inp.closest('.field') || inp.closest('.pill-field');
@@ -311,25 +346,63 @@
         if (fl) fl.classList.toggle('invalid', bad);
         if (bad) ok = false;
       });
-      var s = f.querySelector('.form-success');
-      if (ok && s) {
-        f.querySelectorAll('.field, .pill-field').forEach(function (x) { x.classList.remove('invalid'); });
-        var kind = f.getAttribute('data-form') || 'enquiry';
-        var titles = { enquiry: 'General Enquiry', quote: 'Request a Quote', distributor: 'Distributor Application', partner: 'Partnership Proposal' };
-        var lines = [];
-        f.querySelectorAll('input, select, textarea').forEach(function (input) {
-          if (!input.value.trim()) return;
-          var label = f.querySelector('label[for="' + input.id + '"]');
-          var name = label ? label.textContent.replace('*', '').trim() : input.name || input.id;
-          lines.push(name + ': ' + input.value.trim());
+      if (!ok) return;
+
+      f.querySelectorAll('.field, .pill-field').forEach(function (x) { x.classList.remove('invalid'); });
+      if (s) s.classList.remove('show', 'is-error');
+
+      /* ---- Collect fields into a readable payload ---- */
+      var kind = f.getAttribute('data-form') || 'enquiry';
+      var fields = {};
+      var lines = [];
+      f.querySelectorAll('input, select, textarea').forEach(function (input) {
+        if (input.type === 'hidden' || !input.value.trim()) return;
+        var label = f.querySelector('label[for="' + input.id + '"]');
+        var name = label ? label.textContent.replace('*', '').trim() : (input.name || input.id);
+        if (!name) return;
+        var val = input.value.trim();
+        fields[name] = val;
+        lines.push(name + ': ' + val);
+      });
+
+      var subject = (FORM_TITLES[kind] || 'Website Enquiry') + ' - Jodozo Farms website';
+      var payload = {
+        _subject: subject,
+        _template: 'table',
+        _captcha: 'false',
+        _gotcha: '',
+        Form: kind,
+        'Sent from': location.href,
+        'Sent at': new Date().toString()
+      };
+      Object.keys(fields).forEach(function (k) { payload[k] = fields[k]; });
+
+      /* ---- Sending state ---- */
+      if (btn) { btn.disabled = true; btn.innerHTML = 'Sending...'; }
+
+      fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload)
+      })
+        .then(function (r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json().catch(function () { return { success: true }; });
+        })
+        .then(function (res) {
+          if (res && res.success === false) throw new Error(res.message || 'Rejected');
+          f.reset();
+          setFormMsg(s, '<b>Thank you!</b> Your message has been sent to our team - we will reply within one working day.');
+        })
+        .catch(function () {
+          /* Network / endpoint failure - never drop the enquiry. */
+          var body = 'Hello Jodozo Farms,\n\n' + lines.join('\n') + '\n\nSent from the Jodozo Farms website.';
+          window.location.href = 'mailto:' + ADMIN_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+          setFormMsg(s, '<b>Your email app has opened.</b> We could not send it automatically, so please press Send to deliver it to our team.', true);
+        })
+        .then(function () {
+          if (btn) { btn.disabled = false; btn.innerHTML = btnHtml; }
         });
-        var subject = (titles[kind] || 'Website Enquiry') + ' — Jodozo Farms website';
-        var body = 'Hello Jodozo Farms,\n\n' + lines.join('\n') + '\n\nSent from the Jodozo Farms website.';
-        window.location.href = 'mailto:info@jodozofarms.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-        s.querySelector('span').innerHTML = '<b>Your email app has opened.</b> Review the message and press Send to deliver it to our team.';
-        s.classList.add('show');
-        s.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
     });
   });
 })();

@@ -20,7 +20,7 @@
   function updateSeo(post) {
     var desc = (post.body || '').replace(/\s+/g, ' ').trim() || post.title;
     if (desc.length > 155) desc = desc.slice(0, 152).replace(/\s+\S*$/, '') + '...';
-    var url = SITE_URL + '/post.html?id=' + encodeURIComponent(post.id);
+    var url = SITE_URL + '/post?id=' + encodeURIComponent(post.id);
     var img = absImg(post.img);
     setMeta('name', 'description', desc);
     setMeta('property', 'og:title', post.title);

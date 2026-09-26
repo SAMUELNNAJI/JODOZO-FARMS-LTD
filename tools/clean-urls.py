@@ -26,6 +26,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 
+# The production origin. Canonical/og/sitemap URLs are built from this.
+SITE_URL = "https://www.jodozofarms.com"
+
 # Files whose links we rewrite.
 HTML_GLOBS = ("*.html",)
 JS_GLOBS = ("js/*.js",)
@@ -109,6 +112,24 @@ def main() -> int:
         if new != text:
             sitemap.write_text(new, encoding="utf-8")
             changed.append("sitemap.xml")
+
+    # Canonical tags must stay absolute. fix_html turns a relative canonical
+    # into "/about"; restore the origin so search engines get a full URL.
+    fixed_canonicals = 0
+    for page in sorted(ROOT.glob("*.html")):
+        if page.name in KEEP_EXT:
+            continue
+        text = page.read_text(encoding="utf-8")
+        new = re.sub(
+            r'(<link\s+rel="canonical"\s+href=")(/[^"]*)(")',
+            lambda m: f"{m.group(1)}{SITE_URL}{m.group(2)}{m.group(3)}",
+            text,
+        )
+        if new != text:
+            page.write_text(new, encoding="utf-8")
+            fixed_canonicals += 1
+    if fixed_canonicals:
+        print(f"  ({fixed_canonicals} canonical URL(s) made absolute)")
 
     for name in changed:
         print(f"  {name}")

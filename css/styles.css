@@ -296,6 +296,11 @@ h1,h2,h3,h4{font-family:var(--head);line-height:1.25;color:var(--ink);font-weigh
 .form-success{display:none;background:var(--g50);border:1px solid var(--g200);color:var(--g800);border-radius:14px;padding:18px 20px;font-size:14.5px;align-items:flex-start;gap:12px;margin-bottom:22px}
 .form-success.show{display:flex}
 .form-success svg{width:22px;height:22px;color:var(--g600);flex:none;margin-top:2px}
+.form-success.is-error{background:#fef2f2;border-color:#fecaca;color:#991b1b}
+.form-success.is-error svg{color:#dc2626}
+button[disabled]{opacity:.65;cursor:progress;transform:none}
+/* Honeypot: hidden from humans, reachable by naive bots. */
+.hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
 
 /* ---------- Tabs ---------- */
 .tabs{display:flex;gap:8px;background:var(--soft);border:1px solid var(--line);border-radius:99px;padding:6px;width:max-content;margin:0 auto 44px;flex-wrap:wrap;justify-content:center}

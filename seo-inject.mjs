@@ -32,7 +32,10 @@ function pageDesc(html) {
   const m = html.match(/<meta\s+name="description"\s+content="([\s\S]*?)">/i);
   return m ? decodeEntities(m[1]).trim() : '';
 }
-function canonicalFor(file) { return file === 'index.html' ? SITE_URL + '/' : SITE_URL + '/' + file; }
+/* Clean URLs: the site is served at /about, not /about.html. Files on disk
+   keep the .html extension, but every generated URL drops it. */
+function cleanSlug(file) { return file.replace(/\.html$/i, ''); }
+function canonicalFor(file) { return file === 'index.html' ? SITE_URL + '/' : SITE_URL + '/' + cleanSlug(file); }
 
 /* ---------- page list ---------- */
 const pages = readdirSync('.')

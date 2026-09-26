@@ -85,10 +85,8 @@ const FOOTER_HTML = `
         </a>
         <p>Growing Agriculture. Processing Opportunities. Building Sustainable Communities — from our farms to your table.</p>
         <div class="socials">
-          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 8.5h2.5V5.5H14A3.5 3.5 0 0 0 10.5 9v2H8v3h2.5v6h3v-6H16l.5-3h-3V9a1 1 0 0 1 .5-.5z"/></svg></a>
-          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6" fill="currentColor"/></svg></a>
-          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.4 8.6a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6zM4.9 10h3v9.5h-3zM10 10h2.8v1.3a3.1 3.1 0 0 1 2.7-1.5c2.4 0 3.6 1.5 3.6 4.2v5.5h-3v-5c0-1.3-.5-2.1-1.6-2.1s-1.6.8-1.6 2.1v5H10z"/></svg></a>
-          <a href="#" aria-label="X (Twitter)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 4h4l4 5.5L17.5 4H20l-6 7.5L20.5 20h-4l-4.3-6L8 20H5.5l6-7.5z"/></svg></a>
+          <a href="https://www.facebook.com/share/19gSYvyKt2/" target="_blank" rel="noopener noreferrer" aria-label="Jodozo Farms on Facebook" title="Facebook"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 8.5h2.5V5.5H14A3.5 3.5 0 0 0 10.5 9v2H8v3h2.5v6h3v-6H16l.5-3h-3V9a1 1 0 0 1 .5-.5z"/></svg></a>
+          <a href="https://www.instagram.com/jodozofarms/" target="_blank" rel="noopener noreferrer" aria-label="Jodozo Farms on Instagram" title="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6" fill="currentColor"/></svg></a>
         </div>
       </div>
       <div>
@@ -129,7 +127,7 @@ const FOOTER_HTML = `
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6 7-11a7 7 0 1 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Km 4, Jodozo Road, Kaduna Expressway, Nigeria</span></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.13.96.36 1.9.7 2.8a2 2 0 0 1-.45 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.45c.9.34 1.84.57 2.8.7A2 2 0 0 1 22 16.9z"/></svg><a href="tel:+2348234526487">+234 823 452 6487</a></li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.6 8.6 0 0 1-3.9-.9L3 21l2-4.9a8.4 8.4 0 1 1 16-4.6z"/></svg><a href="https://wa.me/2348234526487">WhatsApp: +234 823 452 6487</a></li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><a href="mailto:info@jodozofarms.com">info@jodozofarms.com</a></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><a href="mailto:jodozofarmslimited@gmail.com">jodozofarmslimited@gmail.com</a></li>
         </ul>
       </div>
     </div>
@@ -154,11 +152,18 @@ const FLOAT_HTML = `
   if (pf) pf.outerHTML = FOOTER_HTML;
   document.body.insertAdjacentHTML('beforeend', FLOAT_HTML);
 
-  /* Active navigation state */
-  var file = (location.pathname.split('/').pop() || '/index').toLowerCase();
-  if (!file || file.indexOf('.html') === -1) file = '/index';
+  /* Active navigation state.
+     Works with clean URLs (/about) and plain files (/about.html, and local
+     file:// testing), so the highlight is right on every host. */
+  var slug = decodeURIComponent(location.pathname)
+    .replace(/\/index\.html?$/i, '/')
+    .replace(/\.html$/i, '')
+    .replace(/\/+$/, '')
+    .toLowerCase() || '/';
+
   var map = {
-    '/index': 'home', '/about': 'about',
+    '/': 'home', '/index': 'home',
+    '/about': 'about',
     '/agribusiness': 'agribusiness', '/crop-production': 'agribusiness',
     '/livestock-farming': 'agribusiness', '/poultry-farming': 'agribusiness',
     '/dairy-farming': 'agribusiness', '/fisheries': 'agribusiness',
@@ -172,7 +177,7 @@ const FLOAT_HTML = `
     '/projects': 'projects', '/partnerships': 'partnerships',
     '/news': 'news', '/contact': 'contact'
   };
-  var key = map[file];
+  var key = map[slug];
   if (key) {
     var link = document.querySelector('.nav-list a[data-nav="' + key + '"]');
     if (link) link.classList.add('active');

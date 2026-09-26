@@ -165,12 +165,28 @@ def pick_sizes(tag: str, context: str, pos: int) -> str:
     return DEFAULT_SIZES
 
 
-def is_eager(tag: str, context: str, pos: int) -> bool:
-    """True for above-the-fold art: the home hero slider and page-hero banners."""
+def priority_for(tag: str, context: str, pos: int) -> str:
+    """fetchpriority for this image.
+
+    The home hero stacks 4 slides but only slide 1 is visible, so only that one
+    is eager/high-priority - the rest must not compete for bandwidth during
+    first paint. Inner-page hero banners (the LCP element) are also high.
+    """
     hay = parent_classes(context, pos) + " " + tag.lower()
     if "partner-img" in hay:
-        return False
-    return bool(re.search(r"hero-slide|bgimg", hay))
+        return "low"
+    if "hero-slide" in hay:
+        # The first slide's parent is the only open "hero-slide" ancestor; the
+        # others also have the section.hero wrapper, so count the occurrences.
+        return "high" if hay.count("hero-slide") == 1 else "low"
+    if "bgimg" in hay:
+        return "high"
+    return "low"
+
+
+def is_eager(tag: str, context: str, pos: int) -> bool:
+    """True for above-the-fold art: the first hero slide and page-hero banners."""
+    return priority_for(tag, context, pos) == "high"
 
 
 def process_tag(tag: str, context: str, pos: int) -> str:
@@ -194,7 +210,8 @@ def process_tag(tag: str, context: str, pos: int) -> str:
     # make the browser pick a "small" candidate that is really full-size.
     jpg_set = f"{variants[0][2]} {full_w}w"
 
-    loading = "eager" if is_eager(tag, context, pos) else "lazy"
+    priority = priority_for(tag, context, pos)
+    loading = "eager" if priority == "high" else "lazy"
 
     out = tag
     out = set_attr(out, "sizes", sizes)
@@ -203,10 +220,7 @@ def process_tag(tag: str, context: str, pos: int) -> str:
     out = set_attr(out, "height", str(full_h))
     out = set_attr(out, "loading", loading)
     out = set_attr(out, "decoding", "async")
-    if loading == "eager":
-        out = set_attr(out, "fetchpriority", "high")
-    else:
-        out = remove_attr(out, "fetchpriority")
+    out = set_attr(out, "fetchpriority", priority)
 
     return (
         f'<picture><source type="image/webp" srcset="{webp_set}" sizes="{sizes}">'
