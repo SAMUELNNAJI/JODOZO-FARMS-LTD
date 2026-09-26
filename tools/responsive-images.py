@@ -222,6 +222,10 @@ def process_tag(tag: str, context: str, pos: int) -> str:
     out = set_attr(out, "decoding", "async")
     out = set_attr(out, "fetchpriority", priority)
 
+    # Already wrapped in <picture>? Just refresh the attributes in place.
+    if "srcset=" in tag.lower() and tag is not out:
+        return out
+
     return (
         f'<picture><source type="image/webp" srcset="{webp_set}" sizes="{sizes}">'
         f"{out}</picture>"
@@ -239,7 +243,7 @@ def process_file(path: Path) -> int:
         tag = m.group(0)
         out_parts.append(text[idx:m.start()])
         src = (get_attr(tag, "src") or "").lower()
-        if "srcset=" not in tag.lower() and src.startswith("images/"):
+        if src.startswith("images/"):
             out_parts.append(process_tag(tag, text, m.start()))
             count += 1
         else:
