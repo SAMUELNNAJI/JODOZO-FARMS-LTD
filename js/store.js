@@ -85,7 +85,7 @@ var JF = (function () {
       posts.forEach(function (p, i) {
         var a = document.createElement('a');
         a.className = 'news-card reveal' + (i % 3 ? ' d' + (i % 3) : '');
-        a.href = '/post?id=' + encodeURIComponent(p.id); a.setAttribute('data-cat', p.cat || 'company');
+        a.href = '/post.html?id=' + encodeURIComponent(p.id); a.setAttribute('data-cat', p.cat || 'company');
         a.innerHTML =
           '<div class="news-img"><img src="' + self.esc(p.img) + '" alt="' + self.esc(p.title) + '" loading="lazy"><span class="chip">' + self.esc(p.tag) + '</span></div>' +
           '<div class="news-body"><div class="news-meta"><span class="news-tag">' + self.esc(p.tag) + '</span><span>' + self.esc(p.date) + '</span></div>' +
@@ -104,7 +104,7 @@ var JF = (function () {
       projects.forEach(function (p, i) {
         var a = document.createElement('a');
         a.className = 'proj-card reveal' + (i % 3 ? ' d' + (i % 3) : '');
-        a.href = '/projects'; a.setAttribute('data-cat', p.cat || 'crops');
+        a.href = '/projects.html'; a.setAttribute('data-cat', p.cat || 'crops');
         a.innerHTML =
           '<div class="proj-img"><img src="' + self.esc(p.img) + '" alt="' + self.esc(p.title) + '" loading="lazy"><span class="chip">' + self.esc(p.chip) + '</span></div>' +
           '<div class="proj-body"><h3>' + self.esc(p.title) + '</h3>' +

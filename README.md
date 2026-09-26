@@ -13,7 +13,7 @@ No build step required — it's a pure static site.
 
 > Note: the shared header/footer are injected by `js/layout.js`, so serving over HTTP (or opening files directly in a browser with JS enabled) both work fine.
 >
-> **Clean URLs:** internal links point at `/about`, `/services`, … not `/about.html`. That only resolves on a real host — `.htaccess` / `_redirects` / `vercel.json` do the rewriting. A bare `python -m http.server` cannot, so use `index.html` directly when previewing locally.
+> **URLs:** internal links use the real filename form (`/about.html`, `/services.html`). This is deliberate - see "URL strategy" below. It resolves on every host, including a bare `python -m http.server`.
 
 ## Site Structure (matches the approved architecture)
 
@@ -127,7 +127,7 @@ Host coverage:
 
 Upload everything to any static host (Netlify, Vercel, GitHub Pages, cPanel). No server-side requirements.
 
-## Performance & Clean URLs
+## Performance & URL strategy
 
 The site was tuned for first-paint speed. These are repeatable scripts in `tools/`
 (they need `Pillow`: `python -m pip install Pillow`).
@@ -137,19 +137,37 @@ The site was tuned for first-paint speed. These are repeatable scripts in `tools
 | `optimize-images.py` | Re-encodes every source JPEG (progressive, quality 78, capped at 2000px) and writes WebP variants at 480/768/1200/1600/2000px. |
 | `responsive-images.py` | Rewrites each `<img>` into a `<picture>` with a WebP `<source srcset>`, adds `sizes`, real `width`/`height` (kills layout shift) and `loading`/`decoding`/`fetchpriority`. |
 | `inject-critical-css.py` | Adds the early `html.js` class and makes the Google Fonts link non-render-blocking. |
-| `clean-urls.py` | Rewrites internal links, canonicals, `og:url` and the sitemap to extension-free URLs. |
-| `verify.py` | Pre-deploy checks: no stale `.html` links, absolute canonicals, every image has dimensions, reveal fail-safes present, host configs exist. |
+| `clean-urls.py` | **Disabled.** Used to rewrite links to extension-free URLs, which 404s on this host. It now exits with an explanation instead of changing anything. |
+| `verify.py` | Pre-deploy checks: absolute canonicals, every image has dimensions, reveal fail-safes present, host configs exist. |
 | `check-render.py` | Proves the page can never render blank (progressive-enhancement rules). |
 | `weight-report.py` | Prints first-paint and full-page weight per viewport vs. the old originals. |
 
-Run order after changing markup: `optimize-images` → `responsive-images` →
-`inject-critical-css` → `clean-urls` → `verify`.
+Run order after changing markup: `optimize-images` -> `responsive-images` ->
+`inject-critical-css` -> `verify`.
+
+**URL strategy — why links keep `.html`.** The site previously used extension-free
+links (`/about`) and relied on `.htaccess` / `_redirects` / `vercel.json` to rewrite
+them. The live host reports `Server: LiteSpeed` (shared cPanel): it ignores
+`vercel.json` and `_redirects` entirely and does not apply the `mod_rewrite` rules,
+so **every clean URL returned 404 while only the homepage appeared to work.**
+
+Every internal link, `canonical`, `og:url` and `sitemap.xml` entry now uses the
+real filename form. This resolves correctly on LiteSpeed/cPanel, Vercel, Netlify,
+GitHub Pages *and* a plain local file server, so it is host-agnostic. The clean-URL
+rules in `.htaccess` are commented out and documented, and `tools/clean-urls.py`
+is disabled, so neither can silently reintroduce 404s.
+
+**Share images.** All non-blog pages use `images/og-default.jpg` (a 1200x630
+brand card built from the logo, 40 KB) for Facebook / WhatsApp / X / LinkedIn
+previews. Blog articles on `post.html` keep their own photo, which `js/post.js`
+swaps in at runtime from the post's image. Set via `DEFAULT_OG_IMAGE` in
+`seo-inject.mjs`.
 
 **Images.** Every photo is served as WebP at the smallest sensible width. The
 homepage hero stacks four slides but only the first is `eager`/`high`; the rest
 are `lazy`/`low` so they never compete with the LCP image. Measured cold-load
-savings: homepage first paint **7,180 KB → 341 KB**; an inner page
-**4,029 KB → 1,038 KB**. Originals are kept so any un-updated link still works.
+savings: homepage first paint **7,180 KB -> 341 KB**; an inner page
+**4,029 KB -> 1,038 KB**. Originals are kept so any un-updated link still works.
 
 **Never a blank page.** `.reveal` elements are *visible by default* and are only
 hidden once the inline `<head>` script sets `html.js`. If JS is off, blocked,
@@ -157,17 +175,3 @@ slow or throws, the content still shows. `main.js` adds three further safety
 nets (IntersectionObserver timeout, GSAP `try/catch` fallback, and a `load`
 handler), and `prefers-reduced-motion` skips the animations entirely. Fonts load
 asynchronously so text paints immediately in a system fallback.
-
-**Clean URLs.** `/about.html` 301-redirects to `/about`; links, canonicals and
-`sitemap.xml` all use the extension-free form. `admin.html` / `login.html` keep
-their extensions (private tools, no SEO value). Host support:
-
-| Host | Config |
-|---|---|
-| Apache / cPanel | `.htaccess` — rewrites, `mod_deflate` compression, 1-year asset caching |
-| Netlify | `_redirects` — `/*.html → /:splat 301!` + cache headers |
-| Vercel | `vercel.json` — `cleanUrls: true` + cache headers |
-| GitHub Pages | no clean-URL support; use `404.html` and keep the `.html` links |
-
-> GitHub Pages cannot rewrite extensions. If that is your host, re-run
-> `clean-urls.py` with the HTML rewrite disabled, or accept `/about.html`.

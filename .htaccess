@@ -44,20 +44,26 @@ ErrorDocument 500 /500.html
   AddType font/woff2 .woff2
 </IfModule>
 
-# ---------- Clean URLs: /about  ->  /about.html ----------
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-
-  # Redirect /about.html to /about (one canonical form for SEO).
-  RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
-  RewriteRule ^ /%1 [R=301,L]
-
-  # Serve /about from about.html without exposing the extension.
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{DOCUMENT_ROOT}/$1.html -f
-  RewriteRule ^(.+?)/?$ /$1.html [L]
-</IfModule>
+# ---------- Clean URLs: intentionally DISABLED ----------
+# The live host is LiteSpeed on shared cPanel. It ignores vercel.json and
+# _redirects, and does NOT apply the mod_rewrite rules below, so /about
+# returns 404 while /about.html works. Every internal link, canonical tag,
+# og:url and the sitemap therefore keep the .html extension, which resolves
+# correctly here AND on Vercel / Netlify / GitHub Pages.
+#
+# The previous ".html -> clean URL" 301 redirect was removed because it
+# redirected working pages to 404s on this host.
+#
+# If you move the site to a host that honours mod_rewrite, uncomment this:
+# <IfModule mod_rewrite.c>
+#   RewriteEngine On
+#   RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
+#   RewriteRule ^ /%1 [R=301,L]
+#   RewriteCond %{REQUEST_FILENAME} !-f
+#   RewriteCond %{REQUEST_FILENAME} !-d
+#   RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+#   RewriteRule ^(.+?)/?$ /$1.html [L]
+# </IfModule>
 
 # ---------- Directory index ----------
 DirectoryIndex index.html index.php

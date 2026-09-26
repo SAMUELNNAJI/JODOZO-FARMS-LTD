@@ -1,24 +1,26 @@
 #!/usr/bin/env python3
 """
-Switch every internal link from `page.html` to the clean `page` form.
+DISABLED - DO NOT RUN.
 
-Why: with the host configs in place (.htaccess, _redirects, vercel.json)
-`/about.html` 301-redirects to `/about`, so keeping `.html` in the markup
-would make every internal click pay for an extra redirect round-trip.
+This tool used to rewrite every internal link from `/about.html` to the clean
+`/about` form, on the assumption that the host config (.htaccess, _redirects,
+vercel.json) would rewrite clean URLs back to files.
 
-Rewrites, in HTML pages and in the JS that builds links:
-  * href="about.html"            -> href="/about"      (index.html -> "/")
-  * href="about.html#profile"    -> href="/about#profile"
-  * href="post.html?id=x"        -> href="/post?id=x"   (query kept)
-  * canonical/og:url  .../about.html -> .../about
-  * sitemap.xml <loc> entries
+That assumption is wrong for this deployment. The site is served by
+LiteSpeed on shared cPanel hosting, which ignores vercel.json and _redirects
+and does not apply the .htaccess rewrite - so `/about` returns 404 while
+`/about.html` works. Links, canonical tags, og:url and the sitemap therefore
+all keep the `.html` extension, which resolves correctly on this host AND on
+Vercel/Netlify/GitHub Pages.
 
-`admin.html` / `login.html` keep their extensions - they are private tools
-excluded from the sitemap, and clean URLs there add no value.
-
-Idempotent. Run:  python tools/clean-urls.py
+If you move the site to a host where clean URLs genuinely work, re-enable
+this tool then.
 """
-from __future__ import annotations
+raise SystemExit(
+    "tools/clean-urls.py is disabled: this host serves .html files only "
+    "(LiteSpeed/cPanel ignores vercel.json/_redirects and does not apply the "
+    ".htaccess rewrite), so clean URLs would 404."
+)from __future__ import annotations
 
 import re
 import sys
