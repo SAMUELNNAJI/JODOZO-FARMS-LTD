@@ -5,70 +5,70 @@
 const HEADER_HTML = `
 <header class="site-header" id="siteHeader">
   <div class="container header-inner">
-    <a class="brand" href="index.html" aria-label="Jodozo Farms Ltd — Home">
+    <a class="brand" href="/index" aria-label="Jodozo Farms Ltd — Home">
       <span class="brand-mark"><img src="favicon.png" alt="Jodozo Farms logo"></span>
       <span class="brand-text"><strong>JODOZO</strong><span>FARMS LTD</span></span>
     </a>
     <nav class="main-nav" id="mainNav" aria-label="Main navigation">
       <ul class="nav-list">
         <li class="has-drop">
-          <a href="about.html" data-nav="about">About <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></a>
+          <a href="/about" data-nav="about">About <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></a>
           <div class="drop">
-            <a href="about.html">About Jodozo Farms</a>
-            <a href="about.html#profile">Company Profile</a>
-            <a href="about.html#vision">Vision &amp; Mission</a>
-            <a href="about.html#values">Our Core Values</a>
-            <a href="about.html#objectives">Our Objectives</a>
-            <a href="about.html#why">Why Jodozo Farms</a>
+            <a href="/about">About Jodozo Farms</a>
+            <a href="/about#profile">Company Profile</a>
+            <a href="/about#vision">Vision &amp; Mission</a>
+            <a href="/about#values">Our Core Values</a>
+            <a href="/about#objectives">Our Objectives</a>
+            <a href="/about#why">Why Jodozo Farms</a>
           </div>
         </li>
         <li class="has-drop">
-          <a href="agribusiness.html" data-nav="agribusiness">Agribusiness <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></a>
+          <a href="/agribusiness" data-nav="agribusiness">Agribusiness <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></a>
           <div class="drop wide">
-            <a href="agribusiness.html">Agribusiness Overview</a>
-            <a href="crop-production.html">Crop Production</a>
-            <a href="livestock-farming.html">Livestock Farming</a>
-            <a href="poultry-farming.html">Poultry Farming</a>
-            <a href="dairy-farming.html">Dairy Farming</a>
-            <a href="fisheries.html">Fisheries</a>
-            <a href="beekeeping.html">Beekeeping</a>
-            <a href="fruit-farming.html">Fruit Farming</a>
-            <a href="cereal-farming.html">Cereal Farming</a>
-            <a href="plantations.html">Plantation Agriculture</a>
+            <a href="/agribusiness">Agribusiness Overview</a>
+            <a href="/crop-production">Crop Production</a>
+            <a href="/livestock-farming">Livestock Farming</a>
+            <a href="/poultry-farming">Poultry Farming</a>
+            <a href="/dairy-farming">Dairy Farming</a>
+            <a href="/fisheries">Fisheries</a>
+            <a href="/beekeeping">Beekeeping</a>
+            <a href="/fruit-farming">Fruit Farming</a>
+            <a href="/cereal-farming">Cereal Farming</a>
+            <a href="/plantations">Plantation Agriculture</a>
           </div>
         </li>
-        <li><a href="agro-processing.html" data-nav="agro-processing">Agro-Processing</a></li>
+        <li><a href="/agro-processing" data-nav="agro-processing">Agro-Processing</a></li>
         <li class="has-drop">
-          <a href="services.html" data-nav="services">Services <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></a>
+          <a href="/services" data-nav="services">Services <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></a>
           <div class="drop wide">
-            <a href="services.html">All Services</a>
-            <a href="mechanised-farming.html">Mechanised Farming</a>
-            <a href="farm-academy.html">Jodozo Farm Academy</a>
-            <a href="services.html#empowerment">Farmer Empowerment</a>
-            <a href="consultancy.html">Agricultural Consultancy</a>
-            <a href="equipment.html">Equipment &amp; Machinery</a>
-            <a href="water-irrigation.html">Water &amp; Irrigation</a>
-            <a href="agricultural-inputs.html">Agricultural Inputs</a>
-            <a href="trade-distribution.html">Trade &amp; Distribution</a>
+            <a href="/services">All Services</a>
+            <a href="/mechanised-farming">Mechanised Farming</a>
+            <a href="/farm-academy">Jodozo Farm Academy</a>
+            <a href="/services#empowerment">Farmer Empowerment</a>
+            <a href="/consultancy">Agricultural Consultancy</a>
+            <a href="/equipment">Equipment &amp; Machinery</a>
+            <a href="/water-irrigation">Water &amp; Irrigation</a>
+            <a href="/agricultural-inputs">Agricultural Inputs</a>
+            <a href="/trade-distribution">Trade &amp; Distribution</a>
           </div>
         </li>
-        <li><a href="projects.html" data-nav="projects">Projects</a></li>
+        <li><a href="/projects" data-nav="projects">Projects</a></li>
         <li class="has-drop">
-          <a href="partnerships.html" data-nav="partnerships">Partnerships <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></a>
+          <a href="/partnerships" data-nav="partnerships">Partnerships <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></a>
           <div class="drop">
-            <a href="partnerships.html">Partnerships Overview</a>
-            <a href="partnerships.html#investors">Investment Opportunities</a>
-            <a href="partnerships.html#outgrowers">Farmers &amp; Outgrowers</a>
-            <a href="partnerships.html#suppliers">Suppliers</a>
-            <a href="partnerships.html#distributors">Distributors</a>
+            <a href="/partnerships">Partnerships Overview</a>
+            <a href="/partnerships#investors">Investment Opportunities</a>
+            <a href="/partnerships#outgrowers">Farmers &amp; Outgrowers</a>
+            <a href="/partnerships#suppliers">Suppliers</a>
+            <a href="/partnerships#distributors">Distributors</a>
           </div>
         </li>
-        <li><a href="news.html" data-nav="news">News</a></li>
-        <li><a href="contact.html" data-nav="contact">Contact</a></li>
+        <li><a href="/news" data-nav="news">News</a></li>
+        <li><a href="/contact" data-nav="contact">Contact</a></li>
       </ul>
     </nav>
     <div class="header-cta">
-      <a class="btn btn-primary btn-sm" href="contact.html?form=quote">Get a Quote</a>
+      <a class="btn btn-primary btn-sm" href="/contact?form=quote">Get a Quote</a>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </div>
@@ -79,7 +79,7 @@ const FOOTER_HTML = `
   <div class="container">
     <div class="foot-grid">
       <div class="f-brand">
-        <a class="brand" href="index.html" aria-label="Jodozo Farms Ltd — Home">
+        <a class="brand" href="/index" aria-label="Jodozo Farms Ltd — Home">
           <span class="brand-mark"><img src="favicon.png" alt="Jodozo Farms logo"></span>
           <span class="brand-text"><strong>JODOZO</strong><span>FARMS LTD</span></span>
         </a>
@@ -94,33 +94,33 @@ const FOOTER_HTML = `
       <div>
         <h4>Quick Links</h4>
         <ul class="f-links">
-          <li><a href="about.html">About Jodozo</a></li>
-          <li><a href="agribusiness.html">Our Agribusiness</a></li>
-          <li><a href="projects.html">Projects</a></li>
-          <li><a href="news.html">News &amp; Resources</a></li>
-          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="/about">About Jodozo</a></li>
+          <li><a href="/agribusiness">Our Agribusiness</a></li>
+          <li><a href="/projects">Projects</a></li>
+          <li><a href="/news">News &amp; Resources</a></li>
+          <li><a href="/contact">Contact Us</a></li>
         </ul>
       </div>
       <div>
         <h4>Our Services</h4>
         <ul class="f-links">
-          <li><a href="agribusiness.html">Farming</a></li>
-          <li><a href="agro-processing.html">Agro-Processing</a></li>
-          <li><a href="agricultural-inputs.html">Agricultural Inputs</a></li>
-          <li><a href="mechanised-farming.html">Mechanised Farming</a></li>
-          <li><a href="equipment.html">Equipment &amp; Machinery</a></li>
-          <li><a href="water-irrigation.html">Water &amp; Irrigation</a></li>
-          <li><a href="farm-academy.html">Farm Academy</a></li>
+          <li><a href="/agribusiness">Farming</a></li>
+          <li><a href="/agro-processing">Agro-Processing</a></li>
+          <li><a href="/agricultural-inputs">Agricultural Inputs</a></li>
+          <li><a href="/mechanised-farming">Mechanised Farming</a></li>
+          <li><a href="/equipment">Equipment &amp; Machinery</a></li>
+          <li><a href="/water-irrigation">Water &amp; Irrigation</a></li>
+          <li><a href="/farm-academy">Farm Academy</a></li>
         </ul>
       </div>
       <div>
         <h4>Business</h4>
         <ul class="f-links">
-          <li><a href="partnerships.html">Partner With Us</a></li>
-          <li><a href="partnerships.html#distributors">Become a Distributor</a></li>
-          <li><a href="partnerships.html#outgrowers">Outgrower Programme</a></li>
-          <li><a href="contact.html?form=quote">Request a Quote</a></li>
-          <li><a href="partnerships.html#investors">Investment Opportunities</a></li>
+          <li><a href="/partnerships">Partner With Us</a></li>
+          <li><a href="/partnerships#distributors">Become a Distributor</a></li>
+          <li><a href="/partnerships#outgrowers">Outgrower Programme</a></li>
+          <li><a href="/contact?form=quote">Request a Quote</a></li>
+          <li><a href="/partnerships#investors">Investment Opportunities</a></li>
         </ul>
       </div>
       <div>
@@ -155,22 +155,22 @@ const FLOAT_HTML = `
   document.body.insertAdjacentHTML('beforeend', FLOAT_HTML);
 
   /* Active navigation state */
-  var file = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-  if (!file || file.indexOf('.html') === -1) file = 'index.html';
+  var file = (location.pathname.split('/').pop() || '/index').toLowerCase();
+  if (!file || file.indexOf('.html') === -1) file = '/index';
   var map = {
-    'index.html': 'home', 'about.html': 'about',
-    'agribusiness.html': 'agribusiness', 'crop-production.html': 'agribusiness',
-    'livestock-farming.html': 'agribusiness', 'poultry-farming.html': 'agribusiness',
-    'dairy-farming.html': 'agribusiness', 'fisheries.html': 'agribusiness',
-    'beekeeping.html': 'agribusiness', 'fruit-farming.html': 'agribusiness',
-    'cereal-farming.html': 'agribusiness', 'plantations.html': 'agribusiness',
-    'agro-processing.html': 'agro-processing',
-    'services.html': 'services', 'mechanised-farming.html': 'services',
-    'farm-academy.html': 'services', 'consultancy.html': 'services',
-    'equipment.html': 'services', 'water-irrigation.html': 'services',
-    'agricultural-inputs.html': 'services', 'trade-distribution.html': 'services',
-    'projects.html': 'projects', 'partnerships.html': 'partnerships',
-    'news.html': 'news', 'contact.html': 'contact'
+    '/index': 'home', '/about': 'about',
+    '/agribusiness': 'agribusiness', '/crop-production': 'agribusiness',
+    '/livestock-farming': 'agribusiness', '/poultry-farming': 'agribusiness',
+    '/dairy-farming': 'agribusiness', '/fisheries': 'agribusiness',
+    '/beekeeping': 'agribusiness', '/fruit-farming': 'agribusiness',
+    '/cereal-farming': 'agribusiness', '/plantations': 'agribusiness',
+    '/agro-processing': 'agro-processing',
+    '/services': 'services', '/mechanised-farming': 'services',
+    '/farm-academy': 'services', '/consultancy': 'services',
+    '/equipment': 'services', '/water-irrigation': 'services',
+    '/agricultural-inputs': 'services', '/trade-distribution': 'services',
+    '/projects': 'projects', '/partnerships': 'partnerships',
+    '/news': 'news', '/contact': 'contact'
   };
   var key = map[file];
   if (key) {

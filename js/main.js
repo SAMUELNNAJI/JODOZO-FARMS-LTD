@@ -137,6 +137,13 @@
         });
       }, { threshold: 0.12 });
       document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+      /* Safety net: never leave content hidden. Anything still not revealed
+         after 2.5s (e.g. observer edge cases, zero-height parents) is shown. */
+      setTimeout(function () {
+        document.querySelectorAll('.reveal:not(.in)').forEach(function (el) {
+          el.classList.add('in');
+        });
+      }, 2500);
     } else {
       document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
     }
@@ -164,6 +171,15 @@
     return el.querySelectorAll('.wi');
   }
   function initGsap() {
+    /* Respect the OS "reduce motion" setting: skip every decorative intro and
+       simply make all content visible. */
+    var reduce = window.matchMedia &&
+                 window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) {
+      document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+      initCountersIO();
+      return;
+    }
     document.documentElement.classList.add('gsap-on');
     gsap.registerPlugin(ScrollTrigger);
 
@@ -222,7 +238,28 @@
       gsap.to(pimg, { yPercent: 14, ease: 'none', scrollTrigger: { trigger: '.partner', start: 'top bottom', end: 'bottom top', scrub: true } });
     }
   }
-  if (window.gsap && window.ScrollTrigger) { initGsap(); } else { initFallbackReveal(); }
+  /* Prefer GSAP for the richer animations, but never let a failure there
+     hide the page: on any error we fall back to the CSS/IO reveal. */
+  if (window.gsap && window.ScrollTrigger) {
+    try {
+      initGsap();
+    } catch (err) {
+      document.documentElement.classList.remove('gsap-on');
+      initFallbackReveal();
+    }
+  } else {
+    initFallbackReveal();
+  }
+
+  /* Absolute last-resort guard: if anything above threw, or the animation
+     library never ran, make sure no content is stuck invisible. */
+  window.addEventListener('load', function () {
+    setTimeout(function () {
+      document.querySelectorAll('.reveal:not(.in)').forEach(function (el) {
+        el.classList.add('in');
+      });
+    }, 3000);
+  });
 
   /* ----- Project / news filtering ----- */
   var bar = document.querySelector('.filter-bar');

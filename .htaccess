@@ -1,4 +1,65 @@
-# JODOZO FARMS LTD — custom error pages (Apache / cPanel)
-# Netlify, Vercel and GitHub Pages serve 404.html automatically; this file covers Apache hosts.
+# JODOZO FARMS LTD — Apache / cPanel configuration
+# Netlify, Vercel and GitHub Pages read _redirects / vercel.json / 404.html
+# instead; this file covers Apache hosts.
+
+# ---------- Custom error pages ----------
 ErrorDocument 404 /404.html
 ErrorDocument 500 /500.html
+
+# ---------- Compression (biggest single speed win on Apache) ----------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/x-javascript
+  AddOutputFilterByType DEFLATE application/json application/xml
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ---------- Browser caching ----------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  # HTML is revalidated so content updates show up immediately.
+  ExpiresByType text/html                     "access plus 0 seconds"
+  ExpiresByType text/css                      "access plus 1 year"
+  ExpiresByType application/javascript        "access plus 1 year"
+  ExpiresByType image/webp                    "access plus 1 year"
+  ExpiresByType image/jpeg                    "access plus 1 year"
+  ExpiresByType image/png                     "access plus 1 year"
+  ExpiresByType image/svg+xml                 "access plus 1 year"
+  ExpiresByType font/woff2                    "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(webp|jpg|jpeg|png|svg|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  # Never cache the HTML shells.
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  Header set X-Content-Type-Options "nosniff"
+</IfModule>
+
+<IfModule mod_mime.c>
+  AddType image/webp .webp
+  AddType font/woff2 .woff2
+</IfModule>
+
+# ---------- Clean URLs: /about  ->  /about.html ----------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Redirect /about.html to /about (one canonical form for SEO).
+  RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
+  RewriteRule ^ /%1 [R=301,L]
+
+  # Serve /about from about.html without exposing the extension.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+  RewriteRule ^(.+?)/?$ /$1.html [L]
+</IfModule>
+
+# ---------- Directory index ----------
+DirectoryIndex index.html index.php
+DirectorySlash Off
+

@@ -1,0 +1,15 @@
+# Netlify redirects — clean URLs + long-lived asset caching.
+# Deploy with the site root as the publish directory.
+
+# /about.html  ->  /about   (permanent, so the extension never shows in the URL)
+/*.html      /:splat      301!
+
+# Long cache for fingerprinted-style assets; HTML is revalidated.
+/images/*
+  Cache-Control: public, max-age=31536000, immutable
+/css/*
+  Cache-Control: public, max-age=604800
+/js/*
+  Cache-Control: public, max-age=604800
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate

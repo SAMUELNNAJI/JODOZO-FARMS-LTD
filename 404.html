@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700;800&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700;800&display=swap" media="print" onload="this.media='all';this.onload=null"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700;800&display=swap"></noscript>
 <link rel="stylesheet" href="css/styles.css">
 <style>
 .err-page{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;padding:48px 20px;overflow:hidden;background:var(--g900)}
@@ -24,25 +24,26 @@
 .err-links a:hover{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.4)}
 @media(max-width:640px){.err-actions .btn{width:100%;justify-content:center}}
 </style>
+<script>document.documentElement.classList.add("js");window.jfFonts=document.fonts;</script>
 </head>
 <body>
 <main class="err-page">
-  <img class="bgimg" src="images/hero-2.jpg" alt="">
+  <picture><source type="image/webp" srcset="images/hero-2-480.webp 480w, images/hero-2-768.webp 768w, images/hero-2-1200.webp 1200w, images/hero-2-1600.webp 1600w" sizes="100vw"><img class="bgimg" src="images/hero-2.jpg" alt="" sizes="100vw" srcset="images/hero-2.jpg 1872w" width="1872" height="4160" loading="eager" decoding="async" fetchpriority="high"></picture>
   <div class="err-inner">
     <div class="err-code">404</div>
     <h1>This page grew wild and wandered off.</h1>
     <p>The link may be broken, or the page may have been moved. Let's get you back to the farm.</p>
     <div class="err-actions">
-      <a class="btn btn-primary" href="index.html">Back to homepage <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a>
-      <a class="btn btn-outline" href="contact.html">Contact us</a>
+      <a class="btn btn-primary" href="/">Back to homepage <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a>
+      <a class="btn btn-outline" href="/contact">Contact us</a>
     </div>
     <div class="err-links">
       <span class="eyebrow">Popular pages</span>
-      <a href="agribusiness.html">Our Agribusiness</a>
-      <a href="projects.html">Projects</a>
-      <a href="news.html">News &amp; Resources</a>
-      <a href="partnerships.html">Invest &amp; Partner</a>
-      <a href="services.html">Services</a>
+      <a href="/agribusiness">Our Agribusiness</a>
+      <a href="/projects">Projects</a>
+      <a href="/news">News &amp; Resources</a>
+      <a href="/partnerships">Invest &amp; Partner</a>
+      <a href="/services">Services</a>
     </div>
   </div>
 </main>
